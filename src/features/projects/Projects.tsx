@@ -72,7 +72,7 @@ export default function Projects() {
         >
             <SectionTitle title={t("nav.projects")} />
 
-            <div className="grid md:grid-cols-2 px-4 lg:px-12 gap-4">
+            <div className="grid md:grid-cols-2 xl:grid-cols-4 px-4 lg:px-12 xl:px-12 gap-6">
                 {projects.map((project, index) => (
                     <ProjectItemView key={index} project={project} />
                 ))}

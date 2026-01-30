@@ -82,7 +82,7 @@ export default function Home() {
                             <TypingText />
                         </div>
 
-                        <p className="text-md md:text-lg text-center md:text-start text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl mb-12">
+                        <p className="text-md md:text-lg text-center md:text-start text-slate-600 dark:text-slate-300 leading-relaxed max-w-3xl mb-12">
                             {t("home.description")}
                         </p>
 
@@ -119,7 +119,7 @@ export default function Home() {
                     </div>
 
                     {/* Right Column */}
-                    <div className="w-full hidden md:flex h-full items-center justify-center pl-4">
+                    <div className="w-full hidden md:flex h-full items-center justify-center pl-12">
                         <TerminalParallax3DEffect />
                     </div>
                 </div>

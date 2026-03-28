@@ -1,0 +1,7 @@
+[pr_description]
+extra_instructions = "Write the PR description in clear, professional English. Do not use any other language."
+generate_ai_title = true
+add_original_user_description = false
+
+[config]
+disable_auto_feedback = true

@@ -45,7 +45,7 @@ jobs:
                   echo "Building React application for production..."
                   cd ~/deployments/portfolio
                   npm install vite --save-dev --no-save
-                  npm run build -- --base=/dev/
+                  npm run build
                   echo "Build completed!"
 
             - name: Log - Deployment completed
@@ -53,5 +53,5 @@ jobs:
                   echo "=========================================="
                   echo "✅ DEPLOYMENT COMPLETED"
                   echo "📦 Files at: ~/deployments/portfolio/dist"
-                  echo "🌐 Live at: https://icdominguez.ddns.net/dev/"
+                  echo "🌐 Live at: https://icdominguez.ddns.net/"
                   echo "=========================================="

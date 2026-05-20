@@ -10,7 +10,7 @@ type Filter = "All" | BlogTag;
 
 const filters: Filter[] = ["All", "Android", "iOS", "Utils"];
 
-const isBlogDone = true;
+const isBlogDone = false;
 
 export default function BlogPage() {
     const { t } = useTranslation();

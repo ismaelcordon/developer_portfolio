@@ -27,6 +27,7 @@ export default function NavBar() {
         { to: "about", label: t("nav.about") },
         { to: "experience", label: t("nav.experience") },
         { to: "projects", label: t("nav.projects") },
+        { to: "/blog", label: t("nav.blog"), type: "route" },
         { to: "contact", label: t("nav.contact") },
     ];
 
@@ -60,19 +61,21 @@ export default function NavBar() {
 
                 {/* Desktop Nav */}
                 <div className="hidden md:flex items-center gap-6">
-                    {links.map(({ to, label }) => (
-                        <a
-                            key={to}
-                            href={`${BASE_URL}#${to}`}
-                            className={anchorLinkClass}
-                        >
-                            {label}
-                        </a>
-                    ))}
+                    {links.map(({ to, label, type }) =>
+                        type === "route" ? (
+                            <Link key={to} to={to} className={anchorLinkClass}>
+                                {label}
+                            </Link>
+                        ) : (
+                            <a key={to} href={`${BASE_URL}#${to}`} className={anchorLinkClass}>
+                                {label}
+                            </a>
+                        )
+                    )}
 
-                    <Link to="/blog" className={anchorLinkClass}>
+                    {/*<Link to="/blog" className={anchorLinkClass}>
                         {t("nav.blog")}
-                    </Link>
+                    </Link>*/}
 
                     <ChangeThemeButton />
 
@@ -93,33 +96,23 @@ export default function NavBar() {
 
                 {/* Mobile menu */}
                 <div
-                    className={`fixed top-16 left-0 right-0 z-40 md:hidden bg-white dark:bg-slate-950 shadow-lg transition-all duration-300 ${
-                        isMenuOpen
-                            ? "top-16 opacity-100"
-                            : "-top-full opacity-0 pointer-events-none"
-                    }`}
+                    className={`fixed top-16 left-0 right-0 z-40 md:hidden bg-white dark:bg-slate-950 shadow-lg transition-all duration-300 ${isMenuOpen
+                        ? "top-16 opacity-100"
+                        : "-top-full opacity-0 pointer-events-none"
+                        }`}
                 >
                     <ul className="flex flex-col text-sm">
-                        {links.map(({ to, label }) => (
-                            <li key={to} className="w-full">
-                                <a
-                                    href={`${BASE_URL}#${to}`}
-                                    onClick={() => setMenuOpen(false)}
-                                    className="block py-2 px-6"
-                                >
+                        {links.map(({ to, label, type }) =>
+                            type === "route" ? (
+                                <Link key={to} to={to} className={anchorLinkClass} onClick={() => setMenuOpen(false)}>
+                                    {label}
+                                </Link>
+                            ) : (
+                                <a key={to} href={`${BASE_URL}#${to}`} className={anchorLinkClass} onClick={() => setMenuOpen(false)}>
                                     {label}
                                 </a>
-                            </li>
-                        ))}
-                        <li className="w-full">
-                            <Link
-                                to="/blog"
-                                onClick={() => setMenuOpen(false)}
-                                className="block py-2 px-6"
-                            >
-                                {t("nav.blog")}
-                            </Link>
-                        </li>
+                            )
+                        )}
                     </ul>
                 </div>
             </div>

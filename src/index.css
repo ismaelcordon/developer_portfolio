@@ -30,9 +30,11 @@ section[id] {
         0% {
             transform: rotate(0deg);
         }
+
         10% {
             transform: rotate(-15deg);
         }
+
         20% {
             transform: rotate(15deg);
         }
@@ -41,6 +43,7 @@ section[id] {
         30% {
             transform: rotate(-15deg);
         }
+
         40% {
             transform: rotate(15deg);
         }
@@ -49,6 +52,7 @@ section[id] {
         50% {
             transform: rotate(-15deg);
         }
+
         60% {
             transform: rotate(15deg);
         }
@@ -59,6 +63,7 @@ section[id] {
             transform: rotate(0deg);
         }
     }
+
     @keyframes marquee {
         0% {
             transform: translateX(-100%);

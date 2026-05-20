@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { BlogPost, BlogTag } from "./types/BlogPost";
 import { SPRITE_URL } from "../../constants/paths";
+import { formatDateToLong } from "../utils/date.utils";
+import { useSettings } from "../../contexts/SettingsContext";
 
 const tagConfig: Record<BlogTag, { classes: string }> = {
     Android: {
@@ -11,23 +13,15 @@ const tagConfig: Record<BlogTag, { classes: string }> = {
         classes:
             "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
     },
-    Utils: {
+    IA: {
         classes:
             "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400",
     },
 };
 
-function formatDate(dateStr: string): string {
-    const [year, month, day] = dateStr.split("-").map(Number);
-    return new Date(year, month - 1, day).toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-    });
-}
-
 export default function BlogPostCard({ post }: { post: BlogPost }) {
-    const tag = tagConfig[post.tag];
+    const { language } = useSettings();
+    const tag = tagConfig[post.tag as BlogTag];
 
     return (
         <Link
@@ -44,7 +38,7 @@ export default function BlogPostCard({ post }: { post: BlogPost }) {
                     <svg className="w-4 h-4 shrink-0">
                         <use href={`${SPRITE_URL}#calendar-icon`} />
                     </svg>
-                    <span className="leading-none">{formatDate(post.date)}</span>
+                    <span className="leading-none">{formatDateToLong(post.publishedAt, language.code)}</span>
                 </span>
             </div>
             <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-snug">

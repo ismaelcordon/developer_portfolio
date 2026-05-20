@@ -1,9 +1,9 @@
-export type BlogTag = "Android" | "iOS" | "Utils";
+export type BlogTag = "Android" | "iOS" | "IA";
 
 export type BlogPost = {
     slug: string;
     title: string;
     description: string;
-    tag: BlogTag;
-    date: string; // ISO format: "YYYY-MM-DD"
+    tag: string;
+    publishedAt: string; // ISO format: "YYYY-MM-DD"
 };

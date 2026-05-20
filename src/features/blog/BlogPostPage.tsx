@@ -1,6 +1,10 @@
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { blogPosts } from "./data/blogPosts";
 import { BlogTag } from "./types/BlogPost";
+import { getPostBySlug } from "../../services/contact.service";
+import { Post } from "../../models/Post";
+import { formatDateToLong } from "../utils/date.utils";
+import { useSettings } from "../../contexts/SettingsContext";
 
 const tagConfig: Record<BlogTag, { classes: string }> = {
     Android: {
@@ -11,26 +15,54 @@ const tagConfig: Record<BlogTag, { classes: string }> = {
         classes:
             "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
     },
-    Utils: {
+    IA: {
         classes:
             "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400",
     },
 };
 
-function formatDate(dateStr: string): string {
-    const [year, month, day] = dateStr.split("-").map(Number);
-    return new Date(year, month - 1, day).toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-    });
-}
-
 export default function BlogPostPage() {
     const { slug } = useParams<{ slug: string }>();
-    const post = blogPosts.find((p) => p.slug === slug);
+    const [post, setPost] = useState<Post | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
 
-    if (!post) {
+    const { language } = useSettings();
+
+    useEffect(() => {
+        const fetchPost = async () => {
+            console.log(`Fetching post: ...${slug}`);
+            if (!slug) {
+                setError(true);
+                setLoading(false);
+                return;
+            }
+
+            try {
+                setLoading(true);
+                setError(false);
+                const fetchedPost = await getPostBySlug(slug);
+                setPost(fetchedPost);
+            } catch (error) {
+                console.error("Failed to fetch post:", error);
+                setError(true);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchPost();
+    }, [slug]);
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-white dark:bg-slate-950 flex items-center justify-center">
+                <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+            </div>
+        );
+    }
+
+    if (!post || error) {
         return (
             <div className="min-h-screen bg-white dark:bg-slate-950 flex items-center justify-center">
                 <div className="text-center">
@@ -48,7 +80,7 @@ export default function BlogPostPage() {
         );
     }
 
-    const tag = tagConfig[post.tag];
+    const tag = tagConfig[post.tag as BlogTag] ?? tagConfig.Android;
 
     return (
         <div className="min-h-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-white">
@@ -67,7 +99,7 @@ export default function BlogPostPage() {
                         {post.tag}
                     </span>
                     <span className="text-sm text-slate-400 dark:text-slate-500">
-                        {formatDate(post.date)}
+                        {formatDateToLong(post.publishedAt, language.code)}
                     </span>
                 </div>
 
@@ -78,6 +110,11 @@ export default function BlogPostPage() {
                 <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-lg">
                     {post.description}
                 </p>
+
+                <div
+                    className="blog-content mt-10 prose prose-slate dark:prose-invert max-w-none"
+                    dangerouslySetInnerHTML={{ __html: post.content }}>
+                </div>
             </div>
         </div>
     );

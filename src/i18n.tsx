@@ -10,6 +10,7 @@ const resources = {
                 projects: "Projects",
                 experience: "Experience",
                 contact: "Contact",
+                blog: "Blog",
             },
             home: {
                 description:
@@ -68,12 +69,21 @@ const resources = {
                 echo_journal:
                     "Echo Journal is an audio journaling app that allows you to easily record and save voice memos. Each recording can be associated with a mood and personalized tags, making it easy to organize and filter your audio files later. In addition, during recording, the app automatically generates a description using AI transcription, making it much easier to review and search for your reflections.",
                 note_mark:
-                    "NoteMark is a mobile-first note-taking app designed to work completely offline. All your notes are stored locally, and you decide when they sync with the server: every 15 or 30 minutes, every hour, or manually. Each note has three different modes—view, edit, and read mode—that offer different ways to read and work with content, adapting to both writing and reading without distractions.",
+                    "NoteMark is a offline-first note-taking app designed to work completely offline. All your notes are stored locally, and you decide when they sync with the server: every 15 or 30 minutes, every hour, or manually. Each note has three different modes—view, edit, and read mode—that offer different ways to read and work with content, adapting to both writing and reading without distractions.",
                 lazy_pizza:
                     "LazyPizza is an app for ordering pizza delivery quickly and easily. It displays a catalog of pizzas and toppings, along with a preferences section to customize delivery times. The app can be used as a guest or by logging in via SMS, allowing you to save an order history that can be viewed at any time.",
             },
             download_resume: "Resume",
             greeting: "Hi I'm",
+            blog: {
+                intro: `<1>Hi! Welcome to my tiny space on the web.</1>
+
+From Monday to Friday, you’ll find me developing apps for iOS and Android—that’s what I do for a living. But I’m not settle for just front end: <1>I'm passionate about backend so I can build complete, real-world, and robust apps from scratch.</1>
+
+That’s where my passion for self-hosting comes from. On this blog, you’ll see my adventures and misadventures setting up a home server, building APIs, configuring Nginx, wrestling with domains, and automating continuous deployments.
+
+I firmly believe that learning is the best thing we can do every day. <1>By the way, in a web flooded with automated content, I promise you this blog is 100% human. No tricks, no gimmicks, and no AIs involved;</1> just me sharing my journey with you.`,
+            },
         },
     },
     es: {
@@ -84,6 +94,7 @@ const resources = {
                 projects: "Proyectos",
                 experience: "Experiencia",
                 contact: "Contacto",
+                blog: "Blog",
             },
             home: {
                 description:
@@ -142,12 +153,21 @@ const resources = {
                 echo_journal:
                     "Echo Journal es una app de journaling en formato de audio que te permite grabar y guardar notas de voz de forma sencilla. Cada grabación puede asociarse a un estado de ánimo (mood) y a etiquetas personalizadas, lo que facilita la organización y el filtrado posterior de los audios. Además, durante la grabación la app genera automáticamente una descripción gracias a la transcripción por IA, haciendo que revisar y buscar tus reflexiones sea mucho más cómodo.",
                 note_mark:
-                    "NoteMark es una aplicación de notas mobile-first diseñada para funcionar completamente sin conexión a internet. Todas tus notas se guardan de forma local y tú decides cuándo se sincronizan con el servidor: cada 15 o 30 minutos, cada hora o de manera manual. Cada nota cuenta con tres modos diferenciados —vista, edición y read mode— que ofrecen distintas formas de leer y trabajar el contenido, adaptándose tanto a la escritura como a la lectura sin distracciones.",
+                    "NoteMark es una aplicación de notas offline-first diseñada para funcionar completamente sin conexión a internet. Todas tus notas se guardan de forma local y tú decides cuándo se sincronizan con el servidor: cada 15 o 30 minutos, cada hora o de manera manual. Cada nota cuenta con tres modos diferenciados —vista, edición y read mode— que ofrecen distintas formas de leer y trabajar el contenido, adaptándose tanto a la escritura como a la lectura sin distracciones.",
                 lazy_pizza:
                     "LazyPizza es una app para pedir pizzas a domicilio de forma rápida y sin complicaciones. Muestra un catálogo de pizzas y complementos, junto con una sección de preferencias para personalizar el momento de la entrega. La app puede usarse como invitado o mediante inicio de sesión por SMS, lo que permite guardar un histórico de pedidos que se puede consultar en cualquier momento.",
             },
             download_resume: "Curriculum",
             greeting: "Hola, soy",
+            blog: {
+                intro: `<1>¡Hola! Bienvenido/a a mi pequeño rincón.</1>
+
+De lunes a viernes me vas a encontrar desarrollando apps para iOS y Android, que es a lo que me dedico. Pero a mí no me basta con la fachada: <1>me flipa el backend para poder construir apps completas, reales y robustas desde cero</1>.
+
+De ahí nace mi pasión por el self-hosting. En este blog verás mis aventuras y desventuras montando un servidor casero, construyendo APIs, configurando Nginx, peleándome con dominios y automatizando despliegues continuos.
+
+Creo firmemente que aprender es lo mejor que podemos hacer cada día. <1>Por cierto, en una red inundada de contenido automático, te prometo que este blog es 100% humano. Sin trampa, sin cartón y sin IAs de por medio; solo yo compartiendo mi viaje contigo.</1>`,
+            },
         },
     },
 };

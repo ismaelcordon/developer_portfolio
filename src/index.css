@@ -73,5 +73,9 @@ section[id] {
 @custom-variant dark (&:is(.dark *));
 
 html {
-    @apply scroll-smooth;
+    @apply scroll-smooth bg-white;
+}
+
+html.dark {
+    @apply bg-slate-950;
 }

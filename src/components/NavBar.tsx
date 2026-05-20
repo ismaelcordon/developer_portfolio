@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import ChangeThemeButton from "./ChangeThemeButton";
 import DefaultButton from "./DefaultButton";
 import LanguageSelector from "./LanguageSelector/LanguageSelector";
 import { useTranslation } from "react-i18next";
-import { SPRITE_URL } from "../constants/paths";
+import { BASE_URL, SPRITE_URL } from "../constants/paths";
 
 export default function NavBar() {
     const navRef = useRef<HTMLElement>(null);
@@ -29,6 +30,9 @@ export default function NavBar() {
         { to: "contact", label: t("nav.contact") },
     ];
 
+    const anchorLinkClass =
+        "px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-all duration-300";
+
     return (
         <nav
             ref={navRef}
@@ -36,15 +40,14 @@ export default function NavBar() {
         >
             <div className="max-w-6xl mx-auto px-4 flex justify-between items-center">
                 {/* Name */}
-
                 <div className="flex flex-row items-center">
                     <svg className="w-8 h-6 bg-gray-200 dark:bg-slate-800 border-transparent rounded-md mr-2 text-blue-600">
                         <use href={`${SPRITE_URL}#terminal-icon`} />
                     </svg>
 
-                    <a href={`#${links[0].to}`}>
+                    <a href={`${BASE_URL}#home`}>
                         <h1
-                            className="cursor-pointer text-xl font-bold 
+                            className="cursor-pointer text-xl font-bold
                     hover:underline hover:underline-offset-4 hover:decoration-blue-600 xs:text-lg"
                         >
                             <span className="bg-linear-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
@@ -60,12 +63,16 @@ export default function NavBar() {
                     {links.map(({ to, label }) => (
                         <a
                             key={to}
-                            href={`#${to}`}
-                            className="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-all duration-300"
+                            href={`${BASE_URL}#${to}`}
+                            className={anchorLinkClass}
                         >
                             {label}
                         </a>
                     ))}
+
+                    <Link to="/blog" className={anchorLinkClass}>
+                        {t("nav.blog")}
+                    </Link>
 
                     <ChangeThemeButton />
 
@@ -96,8 +103,7 @@ export default function NavBar() {
                         {links.map(({ to, label }) => (
                             <li key={to} className="w-full">
                                 <a
-                                    key={to}
-                                    href={`#${to}`}
+                                    href={`${BASE_URL}#${to}`}
                                     onClick={() => setMenuOpen(false)}
                                     className="block py-2 px-6"
                                 >
@@ -105,6 +111,15 @@ export default function NavBar() {
                                 </a>
                             </li>
                         ))}
+                        <li className="w-full">
+                            <Link
+                                to="/blog"
+                                onClick={() => setMenuOpen(false)}
+                                className="block py-2 px-6"
+                            >
+                                {t("nav.blog")}
+                            </Link>
+                        </li>
                     </ul>
                 </div>
             </div>

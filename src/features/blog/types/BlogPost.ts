@@ -1,4 +1,4 @@
-export type BlogTag = "Android" | "iOS" | "IA";
+export type BlogTag = "Android" | "iOS" | "AI";
 
 export type BlogPost = {
     slug: string;

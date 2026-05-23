@@ -1,6 +1,11 @@
+import { TFunction } from "i18next";
 import { SPRITE_URL } from "../constants/paths";
 
-export function ComingSoon() {
+interface ComingSoonProps {
+    t: TFunction;
+}
+
+export function ComingSoon({ t }: ComingSoonProps) {
     return (
         <div className="flex flex-col items-center justify-center gap-6 py-32 text-center">
             <div className="relative">
@@ -10,10 +15,10 @@ export function ComingSoon() {
             </div>
             <div className="flex flex-col gap-2">
                 <h2 className="text-2xl font-bold text-slate-800 dark:text-white">
-                    Coming Soon
+                    {t("blog.coming_soon.title")}
                 </h2>
                 <p className="text-sm text-slate-500 dark:text-slate-400 max-w-xs">
-                    Posts are on their way. Check back soon!
+                    {t("blog.coming_soon.description")}
                 </p>
             </div>
         </div>

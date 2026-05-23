@@ -5,6 +5,7 @@ import { getPostBySlug } from "../../services/contact.service";
 import { Post } from "../../models/Post";
 import { formatDateToLong } from "../utils/date.utils";
 import { useSettings } from "../../contexts/SettingsContext";
+import { useTranslation } from "react-i18next";
 
 const tagConfig: Record<BlogTag, { classes: string }> = {
     Android: {
@@ -15,13 +16,14 @@ const tagConfig: Record<BlogTag, { classes: string }> = {
         classes:
             "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
     },
-    IA: {
+    AI: {
         classes:
             "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400",
     },
 };
 
 export default function BlogPostPage() {
+    const { t } = useTranslation();
     const { slug } = useParams<{ slug: string }>();
     const [post, setPost] = useState<Post | null>(null);
     const [loading, setLoading] = useState(true);
@@ -67,13 +69,13 @@ export default function BlogPostPage() {
             <div className="min-h-screen bg-white dark:bg-slate-950 flex items-center justify-center">
                 <div className="text-center">
                     <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">
-                        Post not found
+                        {t("blog.post_not_found")}
                     </h1>
                     <Link
                         to="/blog"
                         className="text-blue-600 dark:text-blue-400 hover:underline"
                     >
-                        ← Back to Blog
+                        {t("blog.back_to_blog")}
                     </Link>
                 </div>
             </div>
@@ -89,7 +91,7 @@ export default function BlogPostPage() {
                     to="/blog"
                     className="inline-flex items-center gap-1 text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors mb-10"
                 >
-                    ← Back to Blog
+                    {t("blog.back_to_blog")}
                 </Link>
 
                 <div className="flex items-center gap-3 mb-6">
@@ -113,8 +115,8 @@ export default function BlogPostPage() {
 
                 <div
                     className="blog-content mt-10 prose prose-slate dark:prose-invert max-w-none"
-                    dangerouslySetInnerHTML={{ __html: post.content }}>
-                </div>
+                    dangerouslySetInnerHTML={{ __html: post.content }}
+                ></div>
             </div>
         </div>
     );

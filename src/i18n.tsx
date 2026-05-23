@@ -83,6 +83,21 @@ From Monday to Friday, you’ll find me developing apps for iOS and Android—th
 That’s where my passion for self-hosting comes from. On this blog, you’ll see my adventures and misadventures setting up a home server, building APIs, configuring Nginx, wrestling with domains, and automating continuous deployments.
 
 I firmly believe that learning is the best thing we can do every day. <1>By the way, in a web flooded with automated content, I promise you this blog is 100% human. No tricks, no gimmicks, and no AIs involved;</1> just me sharing my journey with you.`,
+                coming_soon: {
+                    title: "Coming soon ...",
+                    description: "Posts are on their way. Check back soon!",
+                },
+                back_to_blog: "← Back to Blog",
+                post_not_found: "Post not found",
+                no_post_found: "No post found for ",
+                clear_filters: "Clear filters",
+                search_placeholder: "Search posts... (min 3 characters)",
+                filters: {
+                    all: "All",
+                    android: "Android",
+                    ios: "iOS",
+                    ai: "AI",
+                },
             },
         },
     },
@@ -167,6 +182,23 @@ De lunes a viernes me vas a encontrar desarrollando apps para iOS y Android, que
 De ahí nace mi pasión por el self-hosting. En este blog verás mis aventuras y desventuras montando un servidor casero, construyendo APIs, configurando Nginx, peleándome con dominios y automatizando despliegues continuos.
 
 Creo firmemente que aprender es lo mejor que podemos hacer cada día. <1>Por cierto, en una red inundada de contenido automático, te prometo que este blog es 100% humano. Sin trampa, sin cartón y sin IAs de por medio; solo yo compartiendo mi viaje contigo.</1>`,
+                coming_soon: {
+                    title: "Próximamete",
+                    description:
+                        "Las publicaciones están en camino. ¡Vuelve pronto!",
+                },
+                back_to_blog: "← Volver al Blog",
+                post_not_found: "Publicación no encontrada",
+                no_post_found: "No se han encontrado posts para ",
+                clear_filters: "Limpiar filtros",
+                search_placeholder:
+                    "Buscar publicaciones... (min 3 caracteres)",
+                filters: {
+                    all: "Todos",
+                    android: "Android",
+                    ios: "iOS",
+                    ai: "IA",
+                },
             },
         },
     },

@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import BlogPostCard from "./BlogPostCard";
 import Pagination from "./Pagination";
-import { BlogTag, BlogPost } from "./types/BlogPost";
+import { BlogPost } from "./types/BlogPost";
 import { SPRITE_URL } from "../../constants/paths";
 import { ComingSoon } from "../../components/ComingSoon";
 import { Trans, useTranslation } from "react-i18next";
 import { getPosts } from "../../services/contact.service";
 import { Post } from "../../models/Post";
 import { useSettings } from "../../contexts/SettingsContext";
+import { BlogTag } from "@ismael-cordon/blog-shared";
 
 type Filter = "All" | BlogTag;
 

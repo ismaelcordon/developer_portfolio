@@ -1,7 +1,7 @@
 @import "tailwindcss";
+@source "../../../packages/blog-shared/src";
 
 @keyframes zoom-in-out {
-
     0%,
     100% {
         transform: scale(1);

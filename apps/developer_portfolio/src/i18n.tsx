@@ -183,7 +183,7 @@ De ahí nace mi pasión por el self-hosting. En este blog verás mis aventuras y
 
 Creo firmemente que aprender es lo mejor que podemos hacer cada día. <1>Por cierto, en una red inundada de contenido automático, te prometo que este blog es 100% humano. Sin trampa, sin cartón y sin IAs de por medio; solo yo compartiendo mi viaje contigo.</1>`,
                 coming_soon: {
-                    title: "Próximamete",
+                    title: "Próximamente",
                     description:
                         "Las publicaciones están en camino. ¡Vuelve pronto!",
                 },

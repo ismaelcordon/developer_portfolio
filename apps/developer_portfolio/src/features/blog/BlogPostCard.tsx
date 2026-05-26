@@ -3,6 +3,7 @@ import { BlogPost, BlogTag } from "./types/BlogPost";
 import { SPRITE_URL } from "../../constants/paths";
 import { formatDateToLong } from "../utils/date.utils";
 import { useSettings } from "../../contexts/SettingsContext";
+import { trackBlogPostView } from "../../analytics/umami";
 
 const tagConfig: Record<BlogTag, { classes: string }> = {
     Android: {
@@ -31,6 +32,10 @@ export default function BlogPostCard({ post }: BlogPostCardProps) {
         <Link
             to={`/blog/${post.slug}`}
             className="group flex flex-col gap-3 bg-white dark:bg-slate-800/50 rounded-2xl p-6 border border-slate-100 dark:border-slate-700/50 hover:border-blue-400 dark:hover:border-blue-500 shadow-sm shadow-slate-200/50 dark:shadow-slate-900/50 transition-all duration-300 hover:-translate-y-2"
+            onClick={() => {
+                trackBlogPostView(post.slug, "click");
+            }}
+            state={{ fromClick: true }}
         >
             <div className="flex items-center">
                 <span

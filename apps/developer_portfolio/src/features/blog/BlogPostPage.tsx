@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { BlogTag } from "./types/BlogPost";
 import { getPostBySlug } from "../../services/contact.service";
 import { Post } from "../../models/Post";
@@ -7,6 +7,7 @@ import { formatDateToLong } from "../utils/date.utils";
 import { useSettings } from "../../contexts/SettingsContext";
 import { useTranslation } from "react-i18next";
 import { BlogContent } from "@ismael-cordon/blog-shared";
+import { trackBlogPostView } from "../../analytics/umami";
 
 const tagConfig: Record<BlogTag, { classes: string }> = {
     Android: {
@@ -26,11 +27,22 @@ const tagConfig: Record<BlogTag, { classes: string }> = {
 export default function BlogPostPage() {
     const { t } = useTranslation();
     const { slug } = useParams<{ slug: string }>();
+    const location = useLocation();
     const [post, setPost] = useState<Post | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
 
     const { language } = useSettings();
+
+    useEffect(() => {
+        if (!slug) return;
+
+        const state = location.state as { fromClick?: boolean } | null;
+
+        if (!state?.fromClick) {
+            trackBlogPostView(slug, "direct");
+        }
+    }, [location.state]);
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -112,11 +124,6 @@ export default function BlogPostPage() {
                 <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-lg">
                     {post.description}
                 </p>
-
-                {/*<div
-                    className="blog-content mt-10 prose prose-slate dark:prose-invert max-w-none"
-                    dangerouslySetInnerHTML={{ __html: post.content }}
-                ></div>*/}
 
                 <BlogContent content={post.content} />
             </div>

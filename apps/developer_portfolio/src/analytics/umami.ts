@@ -1,5 +1,6 @@
 export type ResumeLocation = "home" | "experience";
 export type OutboundTarget = "github" | "linkedin";
+export type BlogViewTrigger = "click" | "direct";
 
 function track(event: string, data?: Record<string, unknown>) {
     if (
@@ -34,4 +35,8 @@ export function trackProjectSourCodeClick(project: string) {
 
 export function trackSendContactClick() {
     track("send_contact_click");
+}
+
+export function trackBlogPostView(slug: string, trigger: BlogViewTrigger) {
+    track("blog_post_view", { slug, trigger });
 }

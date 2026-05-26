@@ -1,48 +1,20 @@
 name: Deploy to Server
 
-env:
-    FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 on:
     push:
         branches:
             - main
+        types:
+            - closed
     workflow_dispatch:
 jobs:
     deploy:
         runs-on: [self-hosted, ismaelcordon, website]
-
         steps:
             - name: Checkout code
               uses: actions/checkout@v5
-              with:
-                  fetch-depth: 2
-
-            - name: Detect changes
-              id: changes
-              run: |
-                  if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-                    echo "portfolio=true" >> $GITHUB_OUTPUT
-                    echo "blog=true" >> $GITHUB_OUTPUT
-                  else
-                    CHANGED=$(git diff --name-only HEAD~1 HEAD)
-                      echo "$CHANGED"
-
-                    if echo "$CHANGED" | grep -q "^apps/developer_portfolio/\|^packages/blog-shared/"; then
-                      echo "portfolio=true" >> $GITHUB_OUTPUT
-                    else
-                      echo "portfolio=false" >> $GITHUB_OUTPUT
-                    fi
-
-                    if echo "$CHANGED" | grep -q "^apps/blog_editor/\|^packages/blog-shared/"; then
-                      echo "blog=true" >> $GITHUB_OUTPUT
-                    else
-                      echo "blog=false" >> $GITHUB_OUTPUT
-                    fi
-                  fi
 
             - name: Create .env for portfolio
-              if: steps.changes.outputs.portfolio == 'true'
               run: |
                   cat > apps/developer_portfolio/.env << EOF
                   VITE_SERVER_BASE_URL=${{ secrets.VITE_SERVER_BASE_URL }}
@@ -50,7 +22,6 @@ jobs:
                   EOF
 
             - name: Create .env for blog editor
-              if: steps.changes.outputs.blog == 'true'
               run: |
                   cat > apps/blog_editor/.env << EOF
                   VITE_PORTFOLIO_API_KEY=${{ secrets.VITE_PORTFOLIO_API_KEY }}
@@ -66,11 +37,9 @@ jobs:
               run: pnpm install --frozen-lockfile
 
             - name: Build blog-shared
-              if: steps.changes.outputs.portfolio == 'true' || steps.changes.outputs.blog == 'true'
               run: pnpm --filter @ismael-cordon/blog-shared build
 
             - name: Build and deploy portfolio
-              if: steps.changes.outputs.portfolio == 'true'
               run: |
                   pnpm --filter developer_portfolio build
                   rm -rf ~/deployments/developer_portfolio/*
@@ -78,32 +47,47 @@ jobs:
                   echo "✅ Portfolio deployed!"
 
             - name: Build and deploy blog editor
-              if: steps.changes.outputs.blog == 'true'
               run: |
                   pnpm --filter blog_editor build
                   rm -rf ~/deployments/blog_editor/*
                   cp -r apps/blog_editor/dist/* ~/deployments/blog_editor/
                   echo "✅ Blog editor deployed!"
 
-            - name: Notify Telegram
-              if: success()
+            - name: Send Telegram Notification
+              if: always()
+              env:
+                  JOB_STATUS: ${{ job.status }}
+                  SOURCE_BRANCH: ${{ github.event.pull_request.head.ref }}
+                  PR_TITLE: ${{ github.event.pull_request.title }}
+                  AUTHOR: ${{ github.actor }}
+                  REPOSITORY: ${{ github.repository }}
               run: |
-                  MESSAGE="✅ Deployment completed successfully!%0A"
-                  MESSAGE+="Branch: ${{ github.ref_name }}%0A"
-                  MESSAGE+="Commit: ${{ github.sha }}"
-                  curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
-                    -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
-                    -d text="$MESSAGE"
+                  echo "... Setting up telegram message ..."
 
-            - name: Notify Telegram on failure
-              if: failure()
-              run: |
-                  MESSAGE="❌ Deployment FAILED!%0A"
-                  MESSAGE+="Branch: ${{ github.ref_name }}%0A"
-                  MESSAGE+="Commit: ${{ github.sha }}"
+                  # Definimos el emoji y texto de estado
+                  if [ "$JOB_STATUS" = "success" ]; then
+                    STATUS_TEXT="✅ <b>DEPLOYMENT SUCCESSFUL</b>"
+                  else
+                    STATUS_TEXT="❌ <b>ERROR IN THE DEPLOYMENT</b>"
+                  fi
+
+                  # Construimos el mensaje usando Markdown
+                  MESSAGE=$(cat <<EOF
+                  $STATUS_TEXT
+
+                  📦 <b>Project:</b> $REPOSITORY
+                  🚀 <b>Environment:</b> Develop
+                  🌿 <b>Source Branch:</b> $SOURCE_BRANCH
+                  📝 <b>PR:</b> $PR_TITLE
+                  👤 <b>Author:</b> $AUTHOR
+                  EOF
+                  )
+
+                  # Enviamos el mensaje a la API de Telegram
                   curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
                     -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
-                    -d text="$MESSAGE"
+                    -d text="$MESSAGE" \
+                    -d parse_mode="HTML"
 
             - name: Log
               run: |

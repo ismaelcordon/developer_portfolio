@@ -2,18 +2,13 @@ import { SPRITE_URL } from "../constants/paths";
 import { PostStatus, type Post, type PostStatusType } from "../models/Post";
 import { formatDateToShortString } from "../utils/Dates";
 import { useLanguage } from "../contexts/LanguageContext";
+import { tagConfig, BlogTag } from "@ismael-cordon/blog-shared";
 
 const statusStyles: Record<PostStatusType, string> = {
     draft: "bg-zinc-500/20 text-zinc-400",
     published: "bg-emerald-500/20 text-emerald-400",
     scheduled: "bg-amber-500/20 text-amber-400",
     hidden: "bg-zinc-700/50 text-zinc-500",
-};
-
-const tagStyles: Record<string, string> = {
-    Android: "bg-green-500/20 text-green-400",
-    iOS: "bg-blue-500/20 text-blue-400",
-    IA: "bg-purple-500/20 text-purple-400",
 };
 
 interface PostItemProps {
@@ -51,7 +46,7 @@ function PostItem({ post, isSelected, onClick }: PostItemProps) {
 
                 {post.tag && (
                     <span
-                        className={`items-center rounded md text-[0.65rem] font-medium px-1 h-4 ${tagStyles[post.tag.description]}`}
+                        className={`items-center rounded-md text-[0.65rem] font-medium px-1 h-4 ${tagConfig[post.tag.description as BlogTag]?.classes || "bg-zinc-500/20 text-zinc-400"}`}
                     >
                         <p>{post.tag.description}</p>
                     </span>

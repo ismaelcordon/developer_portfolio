@@ -1,24 +1,10 @@
 import { Link } from "react-router-dom";
-import { BlogPost, BlogTag } from "./types/BlogPost";
+import { BlogPost } from "./types/BlogPost";
 import { SPRITE_URL } from "../../constants/paths";
 import { formatDateToLong } from "../utils/date.utils";
 import { useSettings } from "../../contexts/SettingsContext";
 import { trackBlogPostView } from "../../analytics/umami";
-
-const tagConfig: Record<BlogTag, { classes: string }> = {
-    Android: {
-        classes:
-            "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
-    },
-    iOS: {
-        classes:
-            "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
-    },
-    AI: {
-        classes:
-            "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400",
-    },
-};
+import { BlogTag, tagConfig } from "@ismael-cordon/blog-shared";
 
 interface BlogPostCardProps {
     post: BlogPost;

@@ -4,8 +4,6 @@ on:
     push:
         branches:
             - main
-        types:
-            - closed
     workflow_dispatch:
 jobs:
     deploy:
@@ -57,8 +55,8 @@ jobs:
               if: always()
               env:
                   JOB_STATUS: ${{ job.status }}
-                  SOURCE_BRANCH: ${{ github.event.pull_request.head.ref }}
-                  PR_TITLE: ${{ github.event.pull_request.title }}
+                  SOURCE_BRANCH: ${{ github.ref_name }}
+                  COMMIT_MESSAGE: ${{ github.event.head_commit.message || 'Manually triggered' }}
                   AUTHOR: ${{ github.actor }}
                   REPOSITORY: ${{ github.repository }}
               run: |
@@ -77,8 +75,8 @@ jobs:
 
                   📦 <b>Project:</b> $REPOSITORY
                   🚀 <b>Environment:</b> Develop
-                  🌿 <b>Source Branch:</b> $SOURCE_BRANCH
-                  📝 <b>PR:</b> $PR_TITLE
+                  🌿 <b>Branch:</b> $SOURCE_BRANCH
+                  📝 <b>Commit/Trigger:</b> $COMMIT_MESSAGE
                   👤 <b>Author:</b> $AUTHOR
                   EOF
                   )

@@ -33,8 +33,8 @@ import HidePost from "./components/postproperties/HidePost";
 import {
     BlogContent,
     BlogEditorHandle,
-} from "../../../packages/blog-shared/src/BlogContent";
-import { FormatType } from "../../../packages/blog-shared/src/types/FormatType";
+    FormatType
+} from "@ismael-cordon/blog-shared";
 
 function App() {
     const [sidebarOpen, setSidebarOpen] = useState(true);

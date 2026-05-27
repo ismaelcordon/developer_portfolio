@@ -82,10 +82,10 @@ export default function BlogPostPage() {
 
     return (
         <div className="min-h-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-white">
-            <div className="max-w-3xl mx-auto px-4 py-16">
+            <div className="max-w-6xl mx-auto px-4 py-8">
                 <Link
                     to="/blog"
-                    className="inline-flex items-center gap-1 text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors mb-10"
+                    className="inline-flex items-center gap-1 text-lg text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors mb-10"
                 >
                     {t("blog.back_to_blog")}
                 </Link>
@@ -105,7 +105,7 @@ export default function BlogPostPage() {
                     {post.title}
                 </h1>
 
-                <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-lg">
+                <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-lg mb-6">
                     {post.description}
                 </p>
 

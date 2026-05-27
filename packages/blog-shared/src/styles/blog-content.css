@@ -13,11 +13,11 @@
     list-style-type: none;
 }
 
-.tiptap ol>li {
+.tiptap ol > li {
     counter-increment: item;
 }
 
-.tiptap ol>li>p::before {
+.tiptap ol > li > p::before {
     content: counters(item, ".") ". ";
 }
 
@@ -35,19 +35,19 @@
 }
 
 .tiptap-editor h1 {
-    @apply text-3xl text-slate-100 font-bold mt-6 mb-4;
+    @apply text-2xl md:text-3xl text-slate-100 font-bold mt-6 mb-4;
 }
 
 .tiptap-editor h2 {
-    @apply text-2xl font-semibold text-slate-100 mt-5 mb-3;
+    @apply text-xl md:text-2xl font-semibold text-slate-100 mt-5 mb-3;
 }
 
 .tiptap-editor h3 {
-    @apply text-xl font-semibold text-slate-100 mt-4 mb-2;
+    @apply text-lg md:text-2xl font-semibold text-slate-100 mt-4 mb-2;
 }
 
 .tiptap-editor p {
-    @apply text-white;
+    @apply text-white text-base md:text-lg xl:text-xl;
 }
 
 .tiptap-editor hr {
@@ -58,7 +58,7 @@
     text-align: center;
 }
 
-.tiptap-editor p>div:has(img) {
+.tiptap-editor p > div:has(img) {
     display: inline-block !important;
     float: none !important;
     vertical-align: middle !important;

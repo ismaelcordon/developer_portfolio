@@ -4,7 +4,13 @@ import CodeBlockShiki from "tiptap-extension-code-block-shiki";
 import Placeholder from "@tiptap/extension-placeholder";
 import ImageResize from "tiptap-extension-resize-image";
 import { YoutubeAutoEmbed } from "./extensions/YoutubeAutoEmbed";
-import { forwardRef, useImperativeHandle, useMemo, useRef, useState } from "react";
+import {
+    forwardRef,
+    useImperativeHandle,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
 import { FormatType } from "./types/FormatType";
 import "./styles/blog-content.css";
 
@@ -27,34 +33,40 @@ const BlogContent = forwardRef<BlogEditorHandle, Props>(
         const onUpdateRef = useRef(onUpdate);
         onUpdateRef.current = onUpdate;
 
-        const extensions = useMemo(() => [
-            StarterKit.configure({
-                codeBlock: false,
-            }),
-            CodeBlockShiki.configure({
-                defaultTheme: "github-dark",
-                HTMLAttributes: {
-                    style: "background: none",
-                },
-                defaultLanguage: "kotlin",
-            }),
-            Placeholder.configure({
-                placeholder: "Empieza a escribir...",
-            }),
-            YoutubeAutoEmbed,
-            ImageResize.configure({
-                inline: true,
-                HTMLAttributes: {
-                    class: "rounded-lg max-w-full my-4",
-                },
-            }),
-        ], []);
+        const extensions = useMemo(
+            () => [
+                StarterKit.configure({
+                    codeBlock: false,
+                }),
+                CodeBlockShiki.configure({
+                    defaultTheme: "github-dark",
+                    HTMLAttributes: {
+                        style: "background: none",
+                    },
+                    defaultLanguage: "kotlin",
+                }),
+                Placeholder.configure({
+                    placeholder: "Empieza a escribir...",
+                }),
+                YoutubeAutoEmbed,
+                ImageResize.configure({
+                    inline: true,
+                    HTMLAttributes: {
+                        class: "rounded-lg max-w-full my-4",
+                    },
+                }),
+            ],
+            [],
+        );
 
-        const editorProps = useMemo(() => ({
-            attributes: {
-                class: "tiptap-editor focus:outline-none",
-            },
-        }), []);
+        const editorProps = useMemo(
+            () => ({
+                attributes: {
+                    class: "tiptap-editor focus:outline-none",
+                },
+            }),
+            [],
+        );
 
         const editor = useEditor({
             content: initialContent,
@@ -131,7 +143,7 @@ const BlogContent = forwardRef<BlogEditorHandle, Props>(
                 insertLink: (url, text) => {
                     if (!editor) return;
 
-                    const linkClasses = "underline text-blue-500";
+                    const linkClasses = "underline text-red-500";
 
                     if (text && editor.state.selection.empty) {
                         editor

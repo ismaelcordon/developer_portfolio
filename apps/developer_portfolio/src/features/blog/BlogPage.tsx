@@ -12,7 +12,14 @@ import { BlogTag } from "@ismael-cordon/blog-shared";
 
 type Filter = "All" | BlogTag;
 
-const filters: Filter[] = ["All", "Android", "iOS", "AI"];
+const filters: Filter[] = [
+    "All",
+    "Android",
+    "iOS",
+    "AI",
+    "Dev life",
+    "Community",
+];
 const POSTS_PER_PAGE = 20;
 
 export default function BlogPage() {
@@ -73,7 +80,7 @@ export default function BlogPage() {
     return (
         <div className="min-h-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-white">
             <div className="max-w-6xl mx-auto px-4 pb-24">
-                <div className="py-20 text-start">
+                <div className="py-8 text-start">
                     <h1 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mx-auto">
                         Blog
                     </h1>
@@ -181,7 +188,11 @@ export default function BlogPage() {
                                 <p className="text-slate-500 dark:text-slate-400 text-sm">
                                     {t("blog.no_post_found")}
                                     <span className="font-semibold text-slate-700 dark:text-slate-300">
-                                        "{searchQuery}"
+                                        {searchQuery === ""
+                                            ? t(
+                                                  `blog.filters.${activeFilter.toLowerCase()}`,
+                                              )
+                                            : ` "${searchQuery}"`}
                                     </span>
                                 </p>
                                 <button

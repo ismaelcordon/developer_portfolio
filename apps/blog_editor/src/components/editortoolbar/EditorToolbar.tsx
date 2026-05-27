@@ -3,7 +3,7 @@ import { DefaultBlogEditorButton } from "../DefaultBlogEditorButton";
 import { PostStatus, type PostStatusType } from "../../models/Post";
 import { translations } from "../../translations/Translations";
 import { TextEditorButton } from "./TextEditorButton";
-import { FormatType } from "../../../../../packages/blog-shared/src/types/FormatType";
+import { FormatType } from "@ismael-cordon/blog-shared";
 
 type Translations = typeof translations.es;
 

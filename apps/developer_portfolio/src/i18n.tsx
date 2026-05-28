@@ -52,6 +52,8 @@ const resources = {
             },
             experience: {
                 descriptions: {
+                    corporate_security_bbva:
+                        "Maintained and developed as the sole Android and iOS developer new features on BBVA’s corporate applications for managing physical and digital access for employees across different geographical locations, including Spain, Argentina and Mexico.",
                     appsoluciones:
                         "Employee tracking and company management project for multiple companies. Fully developed the solution: app design, database creation, REST API development, and iOS and Android app construction, taking the project from initial concept to a functional product currently in the market.",
                     stradivarius:
@@ -153,6 +155,8 @@ I firmly believe that learning is the best thing we can do every day. <1>By the 
             },
             experience: {
                 descriptions: {
+                    corporate_security_bbva:
+                        "Mantuve y desarrollé como único desarrollador Android e iOS nuevas funcionalidades sobre las apps corporativas de BBVA para gestión de accesos físicos y digitales de los empleados en distintos puntos geográficos como España, Argentina y México.",
                     appsoluciones:
                         "Proyecto de fichaje y gestión de empleados para distintas empresas. Solución end-to-end: diseño de la aplicación, creación de la base de datos, implementación de la REST API y construcción de las apps iOS y Android, llevando el proyecto desde la idea inicial hasta un producto en producción.",
                     stradivarius:

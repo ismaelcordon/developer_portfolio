@@ -21,7 +21,7 @@ export default function Home() {
 
     const handleGithubClick = () => {
         trackOutboundClick("github");
-        window.open("https://github.com/icdominguez", "_blank");
+        window.open("https://github.com/ismaelcordon", "_blank");
     };
 
     const handleLinkedinClick = () => {

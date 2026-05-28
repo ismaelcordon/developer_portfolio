@@ -7,6 +7,54 @@ export default function Timeline() {
 
     const experiences: ExperienceItem[] = [
         {
+            from: new Date(2026, 4),
+            to: null,
+            company: "Entelgy - Corporate Security BBVA",
+            position: "Android & iOS developer",
+            shortDescription: t(
+                "experience.descriptions.corporate_security_bbva",
+            ),
+            highlights: [
+                {
+                    description: "Kotlin",
+                    type: "android",
+                },
+                {
+                    description: "Ktor",
+                    type: "android",
+                },
+                {
+                    description: "Notifications",
+                    type: "android",
+                },
+                {
+                    description: "Biometric authentication",
+                    type: "android",
+                },
+                {
+                    description: "Room",
+                    type: "android",
+                },
+                {
+                    description: "JUnit5",
+                    type: "android",
+                },
+                {
+                    description: "Swift",
+                    type: "ios",
+                },
+                {
+                    description: "Notifications",
+                    type: "ios",
+                },
+
+                {
+                    description: "Biometric authentication",
+                    type: "ios",
+                },
+            ],
+        },
+        {
             from: new Date(2025, 6),
             to: null,
             company: "App Soluciones",

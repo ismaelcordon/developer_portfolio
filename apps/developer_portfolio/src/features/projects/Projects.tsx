@@ -15,7 +15,7 @@ export default function Projects() {
             title: "Lazy Pizza",
             description: "projects.lazy_pizza",
             imageUrl: LazyPizzaCover,
-            projectUrl: "https://github.com/icdominguez/LazyPizza",
+            projectUrl: "https://github.com/ismaelcordon/LazyPizza",
             technologies: [
                 "Jetpack Compose",
                 "MVI Arquitecture",
@@ -44,7 +44,7 @@ export default function Projects() {
             title: "Echo Journal",
             description: "projects.echo_journal",
             imageUrl: EchoJournalCover,
-            projectUrl: "https://github.com/icdominguez/echo_journal",
+            projectUrl: "https://github.com/ismaelcordon/echo_journal",
             technologies: [
                 "Jetpack Compose",
                 "MVI Arquitecture",
@@ -56,7 +56,7 @@ export default function Projects() {
             title: "Master Meme",
             description: "projects.master_meme",
             imageUrl: MasterMemeCover,
-            projectUrl: "https://github.com/icdominguez/master_meme",
+            projectUrl: "https://github.com/ismaelcordon/master_meme",
             technologies: [
                 "Jetpack Compose",
                 "MVI Arquitecture",

@@ -1,27 +1,33 @@
-import { Link } from "react-router-dom";
 import { BlogPost } from "./types/BlogPost";
 import { SPRITE_URL } from "../../constants/paths";
 import { formatDateToLong } from "../utils/date.utils";
-import { useSettings } from "../../contexts/SettingsContext";
 import { trackBlogPostView } from "../../analytics/umami";
+import { FROM_CLICK_STORAGE_KEY } from "./tracking";
 import { BlogTag, tagConfig } from "@ismael-cordon/blog-shared";
 
 interface BlogPostCardProps {
     post: BlogPost;
+    lang: "es" | "en";
 }
 
-export default function BlogPostCard({ post }: BlogPostCardProps) {
-    const { language } = useSettings();
+export default function BlogPostCard({ post, lang }: BlogPostCardProps) {
     const tag = tagConfig[post.tag as BlogTag];
 
     return (
-        <Link
-            to={`/blog/${post.slug}`}
+        <a
+            href={`/${lang}/blog/${post.slug}`}
             className="group flex flex-col gap-3 bg-white dark:bg-slate-800/50 rounded-2xl p-6 border border-slate-100 dark:border-slate-700/50 hover:border-blue-400 dark:hover:border-blue-500 shadow-sm shadow-slate-200/50 dark:shadow-slate-900/50 transition-all duration-300 hover:-translate-y-2"
             onClick={() => {
+                // La navegación recarga la página (SSR), así que dejamos una
+                // marca para que la página del post no vuelva a contar la vista
+                // como "direct".
+                try {
+                    sessionStorage.setItem(FROM_CLICK_STORAGE_KEY, post.slug);
+                } catch {
+                    /* sessionStorage no disponible */
+                }
                 trackBlogPostView(post.slug, "click");
             }}
-            state={{ fromClick: true }}
         >
             <div className="flex items-center">
                 <span
@@ -34,7 +40,7 @@ export default function BlogPostCard({ post }: BlogPostCardProps) {
                         <use href={`${SPRITE_URL}#calendar-icon`} />
                     </svg>
                     <span className="leading-none">
-                        {formatDateToLong(post.publishedAt, language.code)}
+                        {formatDateToLong(post.publishedAt, lang)}
                     </span>
                 </span>
             </div>
@@ -44,6 +50,6 @@ export default function BlogPostCard({ post }: BlogPostCardProps) {
             <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                 {post.description}
             </p>
-        </Link>
+        </a>
     );
 }

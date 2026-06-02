@@ -1,19 +1,15 @@
 {
+    "extends": "astro/tsconfigs/strict",
     "compilerOptions": {
-        "target": "ES2020",
-        "useDefineForClassFields": true,
-        "lib": ["ES2020", "DOM", "DOM.Iterable"],
-        "module": "ESNext",
-        "skipLibCheck": true,
-
-        "moduleResolution": "Bundler",
-        "resolveJsonModule": true,
-        "isolatedModules": true,
-        "noEmit": true,
         "jsx": "react-jsx",
-
-        "strict": true,
-        "types": ["vite/client"]
+        "jsxImportSource": "react",
+        // The existing React source imports types as value imports (e.g.
+        // `import { Post } from "./Post"`). Astro's preset enables
+        // verbatimModuleSyntax, which preserves those imports verbatim and
+        // breaks hydration at runtime. Disable it to keep type-only imports
+        // elided, matching the original Vite behavior.
+        "verbatimModuleSyntax": false
     },
-    "include": ["src"]
+    "include": [".astro/types.d.ts", "**/*"],
+    "exclude": ["dist"]
 }

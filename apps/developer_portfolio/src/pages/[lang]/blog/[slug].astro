@@ -1,0 +1,76 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import BlogPostPageIsland from "../../../features/blog/BlogPostPageIsland";
+import type { Post } from "../../../models/Post";
+
+// Ruta renderizada bajo demanda (SSR): el fetch al backend y los OG tags se
+// resuelven en el servidor en cada petición, antes de enviar el HTML.
+export const prerender = false;
+
+const { lang, slug } = Astro.params;
+
+if (lang !== "es" && lang !== "en") {
+    return Astro.redirect(`/es/blog/${slug}`);
+}
+
+const BASE_URL = import.meta.env.SERVER_BASE_URL;
+
+let post: Post | null = null;
+
+try {
+    const res = await fetch(
+        `${BASE_URL}/posts/slug/${slug}?language=${lang}`,
+        {
+            headers: {
+                "Content-Type": "application/json"
+            },
+        },
+    );
+
+    if (res.ok) {
+        const json = await res.json();
+        const raw = json.data;
+        if (raw) {
+            // Mapear snake_case del backend a camelCase del modelo Post.
+            post = {
+                slug: raw.slug,
+                title: raw.title,
+                description: raw.description,
+                content: raw.content,
+                tag: raw.tag,
+                readingTime: raw.reading_time,
+                publishedAt: raw.published_at,
+            };
+        }
+    }
+} catch (e) {
+    console.error(`Failed to fetch post "${slug}" (${lang}):`, e);
+}
+
+// Post inexistente o error de red: volvemos a la lista en vez de dar 404/500.
+if (!post) {
+    return Astro.redirect(`/${lang}/blog`);
+}
+
+const canonicalUrl = `https://ismaelcordon.com/${lang}/blog/${post.slug}`;
+
+const alternates = [
+    { hreflang: "es", href: new URL(`/es/blog/${post.slug}`, Astro.site).href },
+    { hreflang: "en", href: new URL(`/en/blog/${post.slug}`, Astro.site).href },
+    {
+        hreflang: "x-default",
+        href: new URL(`/es/blog/${post.slug}`, Astro.site).href,
+    },
+];
+---
+
+<BaseLayout
+    title={post.title}
+    description={post.description}
+    ogType="article"
+    ogUrl={canonicalUrl}
+    htmlLang={lang}
+    alternates={alternates}
+>
+    <BlogPostPageIsland post={post} lang={lang} client:only="react" />
+</BaseLayout>

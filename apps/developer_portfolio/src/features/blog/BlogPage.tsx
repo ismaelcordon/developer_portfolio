@@ -7,7 +7,8 @@ import { ComingSoon } from "../../components/ComingSoon";
 import { Trans, useTranslation } from "react-i18next";
 import { getPosts } from "../../services/contact.service";
 import { Post } from "../../models/Post";
-import { useSettings } from "../../contexts/SettingsContext";
+import { FROM_SITE_STORAGE_KEY } from "./tracking";
+import { BASE_URL } from "../../constants/paths";
 import { BlogTag } from "@ismael-cordon/blog-shared";
 
 type Filter = "All" | BlogTag;
@@ -23,20 +24,43 @@ const filters: Filter[] = [
 ];
 const POSTS_PER_PAGE = 20;
 
-export default function BlogPage() {
+interface BlogPageProps {
+    lang: "es" | "en";
+    // Posts resueltos en el servidor (SSR). Si llegan, no hacemos fetch en
+    // cliente: la baseURL del backend no se expone al navegador (env sin
+    // prefijo PUBLIC_), así que el listado se renderiza desde el servidor.
+    initialPosts?: Post[];
+}
+
+export default function BlogPage({ lang, initialPosts }: BlogPageProps) {
     const { t } = useTranslation();
-    const { language } = useSettings();
-    const [posts, setPosts] = useState<Post[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [posts, setPosts] = useState<Post[]>(initialPosts ?? []);
+    const [loading, setLoading] = useState(initialPosts === undefined);
     const [activeFilter, setActiveFilter] = useState<Filter>("All");
     const [searchQuery, setSearchQuery] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
+    // Solo mostramos "volver a la web" si se llegó al blog navegando desde el
+    // NavBar de la web (no por URL directa ni enlace externo).
+    const [cameFromSite, setCameFromSite] = useState(false);
 
     useEffect(() => {
+        try {
+            if (sessionStorage.getItem(FROM_SITE_STORAGE_KEY) === "1") {
+                setCameFromSite(true);
+            }
+        } catch {
+            /* sessionStorage no disponible */
+        }
+    }, []);
+
+    useEffect(() => {
+        // Con datos del servidor no necesitamos (ni podemos) hacer fetch en cliente.
+        if (initialPosts !== undefined) return;
+
         const fetchPosts = async () => {
             try {
                 setLoading(true);
-                const result = await getPosts(language.code);
+                const result = await getPosts(lang);
                 setPosts(result.posts);
             } catch (error) {
                 console.error("Failed to fetch posts:", error);
@@ -46,7 +70,7 @@ export default function BlogPage() {
         };
 
         fetchPosts();
-    }, [language]);
+    }, [lang, initialPosts]);
 
     const isSearchActive = searchQuery.trim().length >= 3;
 
@@ -82,6 +106,15 @@ export default function BlogPage() {
         <div className="min-h-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-white">
             <div className="max-w-6xl mx-auto px-4 pb-24">
                 <div className="py-8 text-start">
+                    {cameFromSite && (
+                        <a
+                            href={BASE_URL}
+                            className="inline-flex items-center gap-1 text-lg text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors mb-10"
+                        >
+                            {t("blog.back_to_website")}
+                        </a>
+                    )}
+
                     <h1 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mx-auto">
                         Blog
                     </h1>
@@ -169,6 +202,7 @@ export default function BlogPage() {
                                             <BlogPostCard
                                                 key={mappedPost.slug}
                                                 post={mappedPost}
+                                                lang={lang}
                                             />
                                         );
                                     })}

@@ -34,7 +34,7 @@ import {
     BlogContent,
     BlogEditorHandle,
     FormatType,
-    TocHeading
+    TocHeading,
 } from "@ismael-cordon/blog-shared";
 import { TableOfContents } from "./components/TableOfContents";
 
@@ -256,7 +256,6 @@ function App() {
         updateWordCountAndReadingTime(contentToCount || "");
     }, [selectedPost?.id, language]);
 
-
     const handleFormat = (type: FormatType) => {
         if (type === "link") {
             linkDialog.open();
@@ -270,8 +269,8 @@ function App() {
     };
 
     const handleCodeFormat = (language: string) => {
-        blogEditorRef.current?.formatCode(language)
-    }
+        blogEditorRef.current?.formatCode(language);
+    };
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -332,9 +331,9 @@ function App() {
             normalize(selectedPost.title) !== normalize(serverPost.title) ||
             normalize(selectedPost.titleEs) !== normalize(serverPost.titleEs) ||
             normalize(selectedPost.description) !==
-            normalize(serverPost.description) ||
+                normalize(serverPost.description) ||
             normalize(selectedPost.descriptionEs) !==
-            normalize(serverPost.descriptionEs) ||
+                normalize(serverPost.descriptionEs) ||
             selectedPost.tag?.tagId !== serverPost.tag?.tagId ||
             normalize(currentContent) !== normalize(serverPost.content) ||
             normalize(currentContentEs) !== normalize(serverPost.contentEs);
@@ -536,59 +535,59 @@ function App() {
                     {(selectedPost.status === PostStatus.PUBLISHED ||
                         selectedPost.status === PostStatus.SCHEDULED ||
                         selectedPost.status === PostStatus.HIDDEN) && (
-                            <div className="flex items-center gap-1.5">
-                                <svg
-                                    className={`${selectedPost.status === PostStatus.PUBLISHED || selectedPost.status === PostStatus.HIDDEN ? `text-emerald-500` : `text-amber-500`} w-4 h-4`}
-                                >
-                                    <use
-                                        href={`${SPRITE_URL}#${selectedPost.status == PostStatus.PUBLISHED ? "calendar-event" : "calendar"}-icon`}
-                                    />
-                                </svg>
+                        <div className="flex items-center gap-1.5">
+                            <svg
+                                className={`${selectedPost.status === PostStatus.PUBLISHED || selectedPost.status === PostStatus.HIDDEN ? `text-emerald-500` : `text-amber-500`} w-4 h-4`}
+                            >
+                                <use
+                                    href={`${SPRITE_URL}#${selectedPost.status == PostStatus.PUBLISHED ? "calendar-event" : "calendar"}-icon`}
+                                />
+                            </svg>
 
-                                <label
-                                    className={`${selectedPost.status === PostStatus.PUBLISHED || selectedPost.status === PostStatus.HIDDEN ? `text-emerald-500` : `text-amber-500`} text-xs font-medium`}
-                                >
-                                    {selectedPost.status === PostStatus.PUBLISHED ||
-                                        selectedPost.status === PostStatus.HIDDEN
-                                        ? t.published_on
-                                        : t.scheduled_on}
-                                    {(selectedPost.status ===
-                                        PostStatus.PUBLISHED ||
-                                        selectedPost.status === PostStatus.HIDDEN
-                                        ? selectedPost.publishedAt != null
-                                        : selectedPost.scheduleAt != null) &&
-                                        formatDateWithTime(
+                            <label
+                                className={`${selectedPost.status === PostStatus.PUBLISHED || selectedPost.status === PostStatus.HIDDEN ? `text-emerald-500` : `text-amber-500`} text-xs font-medium`}
+                            >
+                                {selectedPost.status === PostStatus.PUBLISHED ||
+                                selectedPost.status === PostStatus.HIDDEN
+                                    ? t.published_on
+                                    : t.scheduled_on}
+                                {(selectedPost.status ===
+                                    PostStatus.PUBLISHED ||
+                                selectedPost.status === PostStatus.HIDDEN
+                                    ? selectedPost.publishedAt != null
+                                    : selectedPost.scheduleAt != null) &&
+                                    formatDateWithTime(
+                                        selectedPost.status ===
+                                            PostStatus.PUBLISHED ||
                                             selectedPost.status ===
-                                                PostStatus.PUBLISHED ||
-                                                selectedPost.status ===
                                                 PostStatus.HIDDEN
-                                                ? selectedPost.publishedAt!
-                                                : selectedPost.scheduleAt!,
-                                            language,
-                                        )}
-                                </label>
-                            </div>
-                        )}
+                                            ? selectedPost.publishedAt!
+                                            : selectedPost.scheduleAt!,
+                                        language,
+                                    )}
+                            </label>
+                        </div>
+                    )}
 
                     {(selectedPost.status === PostStatus.PUBLISHED ||
                         selectedPost.status === PostStatus.HIDDEN) && (
-                            <HidePost
-                                t={t}
-                                isHidden={selectedPost.status === PostStatus.HIDDEN}
-                                isLoading={isHiding}
-                                onClick={handlePostVisibility}
-                            />
-                        )}
+                        <HidePost
+                            t={t}
+                            isHidden={selectedPost.status === PostStatus.HIDDEN}
+                            isLoading={isHiding}
+                            onClick={handlePostVisibility}
+                        />
+                    )}
                 </div>
 
                 <div className="w-full flex-1 flex overflow-hidden">
                     <div className="flex flex-1 overflow-hidden h-full">
-
                         <div className="flex-1 overflow-y-auto custom-scrollbar">
                             <div className="py-10 mx-auto px-6 md:px-12">
                                 <BlogContent
                                     key={`${selectedPost.id}-${language}`}
                                     ref={blogEditorRef}
+                                    theme="dark"
                                     content={currentContent || ""}
                                     editable={true}
                                     onUpdate={(html) => {
@@ -620,7 +619,9 @@ function App() {
                                     <svg className="w-4 h-4">
                                         <use href={`${SPRITE_URL}#list-icon`} />
                                     </svg>
-                                    <h3 className="text-md font-semibold">Tabla de contenidos</h3>
+                                    <h3 className="text-md font-semibold">
+                                        Tabla de contenidos
+                                    </h3>
                                 </div>
                             </div>
 

@@ -1,16 +1,22 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
 import ChangeThemeButton from "./ChangeThemeButton";
 import DefaultButton from "./DefaultButton";
 import LanguageSelector from "./LanguageSelector/LanguageSelector";
 import { useTranslation } from "react-i18next";
 import { BASE_URL, SPRITE_URL } from "../constants/paths";
+import { FROM_SITE_STORAGE_KEY } from "../features/blog/tracking";
+import { useSettings } from "../contexts/SettingsContext";
 
 export default function NavBar() {
     const navRef = useRef<HTMLElement>(null);
     const [isMenuOpen, setMenuOpen] = useState(false);
 
     const { t } = useTranslation();
+    const { language } = useSettings();
+
+    // El blog enlaza directo a /{lang}/blog (URL indexable) en vez de pasar por
+    // el redirect /blog: mejor para SEO y un salto menos para el usuario.
+    const blogHref = `${BASE_URL}${language.code}/blog`;
 
     useEffect(() => {
         if (navRef.current) {
@@ -27,12 +33,22 @@ export default function NavBar() {
         { to: "about", label: t("nav.about") },
         { to: "experience", label: t("nav.experience") },
         { to: "projects", label: t("nav.projects") },
-        { to: "/blog", label: t("nav.blog"), type: "route" },
+        { to: "blog", label: t("nav.blog"), type: "route" },
         { to: "contact", label: t("nav.contact") },
     ];
 
     const anchorLinkClass =
         "px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-all duration-300";
+
+    // Al entrar al blog desde el NavBar dejamos una marca para que la lista
+    // muestre el enlace "volver a la web" (solo si vienes navegando desde aquí).
+    const markCameFromSite = () => {
+        try {
+            sessionStorage.setItem(FROM_SITE_STORAGE_KEY, "1");
+        } catch {
+            /* sessionStorage no disponible */
+        }
+    };
 
     return (
         <nav
@@ -61,21 +77,22 @@ export default function NavBar() {
 
                 {/* Desktop Nav */}
                 <div className="hidden md:flex items-center gap-6">
-                    {links.map(({ to, label, type }) =>
-                        type === "route" ? (
-                            <Link key={to} to={to} className={anchorLinkClass}>
-                                {label}
-                            </Link>
-                        ) : (
-                            <a key={to} href={`${BASE_URL}#${to}`} className={anchorLinkClass}>
-                                {label}
-                            </a>
-                        )
-                    )}
-
-                    {/*<Link to="/blog" className={anchorLinkClass}>
-                        {t("nav.blog")}
-                    </Link>*/}
+                    {links.map(({ to, label, type }) => (
+                        <a
+                            key={to}
+                            href={
+                                type === "route"
+                                    ? blogHref
+                                    : `${BASE_URL}#${to}`
+                            }
+                            className={anchorLinkClass}
+                            onClick={
+                                type === "route" ? markCameFromSite : undefined
+                            }
+                        >
+                            {label}
+                        </a>
+                    ))}
 
                     <ChangeThemeButton />
 
@@ -102,17 +119,23 @@ export default function NavBar() {
                         }`}
                 >
                     <ul className="flex flex-col text-sm">
-                        {links.map(({ to, label, type }) =>
-                            type === "route" ? (
-                                <Link key={to} to={to} className={anchorLinkClass} onClick={() => setMenuOpen(false)}>
-                                    {label}
-                                </Link>
-                            ) : (
-                                <a key={to} href={`${BASE_URL}#${to}`} className={anchorLinkClass} onClick={() => setMenuOpen(false)}>
-                                    {label}
-                                </a>
-                            )
-                        )}
+                        {links.map(({ to, label, type }) => (
+                            <a
+                                key={to}
+                                href={
+                                    type === "route"
+                                        ? blogHref
+                                        : `${BASE_URL}#${to}`
+                                }
+                                className={anchorLinkClass}
+                                onClick={() => {
+                                    if (type === "route") markCameFromSite();
+                                    setMenuOpen(false);
+                                }}
+                            >
+                                {label}
+                            </a>
+                        ))}
                     </ul>
                 </div>
             </div>

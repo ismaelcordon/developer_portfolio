@@ -15,7 +15,7 @@ export default function DownloadResumeButton({
 
     function handleClick() {
         trackResumeDownloadClick(location);
-        const resumeUrl = `${import.meta.env.VITE_SERVER_BASE_URL}/cv?lang=${language.code}`;
+        const resumeUrl = `${import.meta.env.PUBLIC_SERVER_BASE_URL}/cv?lang=${language.code}`;
         window.open(resumeUrl, "_blank");
     }
 

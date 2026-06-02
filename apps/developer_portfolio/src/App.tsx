@@ -8,8 +8,6 @@ import Contact from "./features/contact/Contact";
 import Experience from "./features/experience/Experience";
 import Home from "./features/home/Home";
 import Projects from "./features/projects/Projects";
-import BlogPage from "./features/blog/BlogPage";
-import BlogPostPage from "./features/blog/BlogPostPage";
 
 function ScrollToHash() {
     const location = useLocation();
@@ -52,8 +50,6 @@ export default function App() {
                             </>
                         }
                     />
-                    <Route path="/blog" element={<BlogPage />} />
-                    <Route path="/blog/:slug" element={<BlogPostPage />} />
                 </Routes>
             </div>
         </SettingsProvider>

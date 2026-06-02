@@ -1,0 +1,87 @@
+---
+import "../index.css";
+
+interface Alternate {
+    hreflang: string;
+    href: string;
+}
+
+interface Props {
+    title?: string;
+    description?: string;
+    ogImage?: string;
+    ogUrl?: string;
+    ogType?: "website" | "article";
+    htmlLang?: string;
+    // Variantes de idioma de la página (hreflang). Cada entrada genera un
+    // <link rel="alternate">. Solo aplica a páginas con versión es/en (blog).
+    alternates?: Alternate[];
+}
+
+const {
+    title = "Ismael Cordón | Senior Mobile Developer",
+    description = "Portfolio de Ismael Cordón, desarrollador de aplicaciones móviles nativas para Android e iOS.",
+    ogImage = "/og-default.png",
+    ogType = "website",
+    htmlLang = "en",
+    alternates,
+} = Astro.props;
+
+// URL canónica de la página (dominio de producción + ruta actual), evitando
+// que en dev/proxy se cuele localhost.
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
+const ogUrl = Astro.props.ogUrl ?? canonicalUrl;
+// Los scrapers necesitan una URL absoluta para la imagen. Resolvemos contra
+// `site` (astro.config) con fallback a la URL actual.
+const ogImageUrl = new URL(ogImage, Astro.site ?? Astro.url).href;
+const umamiWebsiteId = import.meta.env.UMAMI_WEBSITE_ID;
+---
+
+<!doctype html>
+<html lang={htmlLang} translate="no">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <link rel="canonical" href={canonicalUrl} />
+        {
+            alternates?.map((alt: Alternate) => (
+                <link
+                    rel="alternate"
+                    hreflang={alt.hreflang}
+                    href={alt.href}
+                />
+            ))
+        }
+
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={ogUrl} />
+        <meta property="og:type" content={ogType} />
+        <meta property="og:site_name" content="Ismael Cordón" />
+        <meta property="og:image" content={ogImageUrl} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={ogImageUrl} />
+
+        {
+            umamiWebsiteId && (
+                <script
+                    is:inline
+                    defer
+                    src="https://cloud.umami.is/script.js"
+                    data-website-id={umamiWebsiteId}
+                />
+            )
+        }
+    </head>
+    <body>
+        <slot />
+    </body>
+</html>

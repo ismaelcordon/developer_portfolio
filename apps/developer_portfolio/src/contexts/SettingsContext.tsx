@@ -47,7 +47,15 @@ const SettingsContext = createContext<SettingsContextType | undefined>(
     undefined,
 );
 
-export function SettingsProvider({ children }: { children: ReactNode }) {
+export function SettingsProvider({
+    children,
+    initialLanguage,
+}: {
+    children: ReactNode;
+    // Si se indica (p. ej. desde la URL /[lang]/blog), tiene prioridad sobre
+    // localStorage: la URL es la fuente de verdad del idioma en el blog.
+    initialLanguage?: "es" | "en";
+}) {
     const { i18n } = useTranslation();
 
     const userInitiatedRef = useRef(false);
@@ -58,6 +66,9 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     });
 
     const [language, setLanguage] = useState<Language>(() => {
+        if (initialLanguage) {
+            return LANGUAGES[initialLanguage];
+        }
         const savedLanguage = localStorage.getItem("language");
         if (savedLanguage) {
             try {

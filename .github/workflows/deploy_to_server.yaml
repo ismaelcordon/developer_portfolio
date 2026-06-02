@@ -15,8 +15,9 @@ jobs:
             - name: Create .env for portfolio
               run: |
                   cat > apps/developer_portfolio/.env << EOF
-                  VITE_SERVER_BASE_URL=${{ secrets.VITE_SERVER_BASE_URL }}
-                  VITE_UMAMI_WEBSITE_ID=${{ secrets.VITE_UMAMI_WEBSITE_ID }}
+                  SERVER_BASE_URL=http://127.0.0.1:3003/dev/api
+                  PUBLIC_SERVER_BASE_URL=https://ismaelcordon.com/dev/api
+                  UMAMI_WEBSITE_ID=${{ secrets.VITE_UMAMI_WEBSITE_ID }}
                   EOF
 
             - name: Create .env for blog editor
@@ -37,19 +38,62 @@ jobs:
             - name: Build blog-shared
               run: pnpm --filter @ismael-cordon/blog-shared build
 
-            - name: Build and deploy portfolio
-              run: |
-                  pnpm --filter developer_portfolio build
-                  rm -rf ~/deployments/developer_portfolio/*
-                  cp -r apps/developer_portfolio/dist/* ~/deployments/portfolio/
-                  echo "✅ Portfolio deployed!"
-
             - name: Build and deploy blog editor
               run: |
                   pnpm --filter blog_editor build
                   rm -rf ~/deployments/blog_editor/*
                   cp -r apps/blog_editor/dist/* ~/deployments/blog_editor/
                   echo "✅ Blog editor deployed!"
+
+            - name: Build and deploy portfolio (Astro SSR)
+              run: |
+                  BASE=~/deployments/portfolio
+                  RELEASE=$BASE/releases/$(date +%Y%m%d%H%M%S)
+                  mkdir -p $RELEASE
+
+                  pnpm --filter developer_portfolio build
+                  pnpm --filter developer_portfolio --legacy deploy --prod $RELEASE
+
+                  HOST=127.0.0.1 PORT=4399 node $RELEASE/dist/server/entry.mjs &
+                  PROBE=$!
+                  sleep 3
+                  STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:4399/ || echo "000")
+                  kill $PROBE 2>/dev/null || true
+
+                  if [ "$STATUS" != "200" ]; then
+                    echo "❌ Health check falló ($STATUS) — producción intacta"
+                    rm -rf $RELEASE
+                    exit 1
+                  fi
+
+                  rm -rf $BASE/current
+                  ln -sfn $RELEASE $BASE/current
+                  if pm2 describe portfolio-production > /dev/null 2>&1; then
+                    pm2 restart portfolio-production
+                  else
+                    HOST=127.0.0.1 PORT=4321 pm2 start $BASE/current/dist/server/entry.mjs --name portfolio-production
+                  fi
+
+                  sleep 2
+                  LIVE=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:4321/ || echo "000")
+                  if [ "$LIVE" != "200" ]; then
+                    echo "❌ pm2 no levantó bien — revirtiendo"
+                    ln -sfn $BASE/previous $BASE/current
+                    if pm2 describe portfolio-production > /dev/null 2>&1; then
+                      pm2 restart portfolio-production
+                    else
+                      HOST=127.0.0.1 PORT=4321 pm2 start $BASE/current/dist/server/entry.mjs --name portfolio-production
+                    fi
+                    exit 1
+                  fi
+
+                  pm2 save
+                  rm -rf $BASE/previous
+                  ln -sfn $RELEASE $BASE/previous
+
+                  ls -dt $BASE/releases/*/ | tail -n +4 | xargs rm -rf 2>/dev/null || true
+
+                  echo "✅ Portfolio (SSR) deployed!"
 
             - name: Send Telegram Notification
               if: always()

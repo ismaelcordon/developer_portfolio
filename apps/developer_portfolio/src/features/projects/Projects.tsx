@@ -14,7 +14,7 @@ export default function Projects() {
         {
             title: "Lazy Pizza",
             description: "projects.lazy_pizza",
-            imageUrl: LazyPizzaCover,
+            imageUrl: "/assets/projects/lazy_pizza.png",
             projectUrl: "https://github.com/ismaelcordon/LazyPizza",
             technologies: [
                 "Jetpack Compose",
@@ -28,7 +28,7 @@ export default function Projects() {
         {
             title: "Note Mark",
             description: "projects.note_mark",
-            imageUrl: NoteMarkCover,
+            imageUrl: "/assets/projects/note_mark.png",
             projectUrl: "https://github.com/galahseno/NoteMark",
             technologies: [
                 "Jetpack Compose",
@@ -43,7 +43,7 @@ export default function Projects() {
         {
             title: "Echo Journal",
             description: "projects.echo_journal",
-            imageUrl: EchoJournalCover,
+            imageUrl: "/assets/projects/echo_journal.png",
             projectUrl: "https://github.com/ismaelcordon/echo_journal",
             technologies: [
                 "Jetpack Compose",
@@ -55,7 +55,7 @@ export default function Projects() {
         {
             title: "Master Meme",
             description: "projects.master_meme",
-            imageUrl: MasterMemeCover,
+            imageUrl: "/assets/projects/master_meme.png",
             projectUrl: "https://github.com/ismaelcordon/master_meme",
             technologies: [
                 "Jetpack Compose",

@@ -8,14 +8,6 @@ import { trackOutboundClick } from "../../analytics/umami";
 import { TechItem } from "./types/TechItem";
 import TechItemView from "./TechItemView";
 
-import KotlinPng from "../../assets/tech_stack/kotlin.png";
-import SwiftPng from "../../assets/tech_stack/swift.png";
-import NodeJSPng from "../../assets/tech_stack/nodejs.png";
-import PostgreSQLPng from "../../assets/tech_stack/postgresql.png";
-import TypescriptPng from "../../assets/tech_stack/typescript.png";
-import GitHubPng from "../../assets/tech_stack/github.png";
-import GitPng from "../../assets/tech_stack/git.png";
-
 export default function Home() {
     const { t } = useTranslation();
 
@@ -34,31 +26,31 @@ export default function Home() {
 
     const techStack: TechItem[] = [
         {
-            imageUrl: KotlinPng,
+            imageUrl: "/assets/tech_stack/kotlin.png",
             name: "Kotlin",
         },
         {
-            imageUrl: SwiftPng,
+            imageUrl: "/assets/tech_stack/swift.png",
             name: "Swift",
         },
         {
-            imageUrl: GitHubPng,
+            imageUrl: "/assets/tech_stack/github.png",
             name: "GitHub Actions",
         },
         {
-            imageUrl: NodeJSPng,
+            imageUrl: "/assets/tech_stack/nodejs.png",
             name: "NodeJS",
         },
         {
-            imageUrl: PostgreSQLPng,
+            imageUrl: "/assets/tech_stack/postgresql.png",
             name: "PostgreSQL",
         },
         {
-            imageUrl: TypescriptPng,
+            imageUrl: "/assets/tech_stack/typescript.png",
             name: "Typescript",
         },
         {
-            imageUrl: GitPng,
+            imageUrl: "/assets/tech_stack/git.png",
             name: "Git",
         },
     ];

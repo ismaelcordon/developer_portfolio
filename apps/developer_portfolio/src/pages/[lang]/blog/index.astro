@@ -1,0 +1,70 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import BlogPageIsland from "../../../features/blog/BlogPageIsland";
+import type { Post } from "../../../models/Post";
+
+// Ruta renderizada bajo demanda (SSR): el segmento [lang] no se pre-genera y
+// el listado se obtiene en el servidor.
+export const prerender = false;
+
+const { lang } = Astro.params;
+
+if (lang !== "es" && lang !== "en") {
+    return Astro.redirect("/es/blog");
+}
+
+const BASE_URL = import.meta.env.SERVER_BASE_URL;
+
+// Listado resuelto en el servidor: la baseURL del backend no se expone al
+// cliente (env sin prefijo PUBLIC_). Si falla, pasamos una lista vacía en vez
+// de romper la página.
+let posts: Post[] = [];
+
+try {
+    const res = await fetch(`${BASE_URL}/posts?language=${lang}`, {
+        headers: {
+            "Content-Type": "application/json"
+        },
+    });
+
+    if (res.ok) {
+        const json = await res.json();
+        const rawPosts = json.data?.data ?? [];
+        // Mapear snake_case del backend a camelCase del modelo Post.
+        // El listado no usa `content` (solo las tarjetas), así que lo omitimos
+        // para no serializar el HTML completo de cada post hacia el cliente.
+        posts = rawPosts.map((raw: Record<string, unknown>) => ({
+            slug: raw.slug,
+            title: raw.title,
+            description: raw.description,
+            content: "",
+            tag: raw.tag,
+            readingTime: raw.reading_time,
+            publishedAt: raw.published_at,
+        }));
+    }
+} catch (e) {
+    console.error(`Failed to fetch posts (${lang}):`, e);
+}
+
+const title = "Blog | Ismael Cordón";
+const description =
+    lang === "es"
+        ? "Artículos sobre desarrollo móvil, Android, iOS, backend y self-hosting."
+        : "Articles about mobile development, Android, iOS, backend and self-hosting.";
+
+const alternates = [
+    { hreflang: "es", href: new URL("/es/blog", Astro.site).href },
+    { hreflang: "en", href: new URL("/en/blog", Astro.site).href },
+    { hreflang: "x-default", href: new URL("/es/blog", Astro.site).href },
+];
+---
+
+<BaseLayout
+    title={title}
+    description={description}
+    htmlLang={lang}
+    alternates={alternates}
+>
+    <BlogPageIsland lang={lang} initialPosts={posts} client:only="react" />
+</BaseLayout>

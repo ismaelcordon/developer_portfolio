@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ismaelcordon.com/sitemap.xml

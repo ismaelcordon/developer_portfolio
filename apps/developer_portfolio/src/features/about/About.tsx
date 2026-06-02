@@ -1,7 +1,6 @@
 import { useTranslation, Trans } from "react-i18next";
 import { SectionTitle } from "../../components/SectionTitle";
 import MarqueeBanner from "./MarqueeBanner";
-import profileImage from "../../assets/DSC_0016.JPG";
 import { SPRITE_URL } from "../../constants/paths";
 
 export default function About() {
@@ -35,7 +34,7 @@ export default function About() {
                                 <div className="absolute -inset-4 bg-linear-to-tr from-slate-700/40 to-blue-500/15 rounded-3xl rotate-3 opacity-60"></div>
                                 <div className="relative w-72 h-80 md:w-80 md:h-96 rounded-2xl overflow-hidden shadow-2xl shadow-slate-300/20 dark:shadow-blue-900/20">
                                     <img
-                                        src={profileImage}
+                                        src="/assets/DSC_0016.JPG"
                                         className="w-full h-full object-cover object-[center_20%]"
                                     />
                                 </div>

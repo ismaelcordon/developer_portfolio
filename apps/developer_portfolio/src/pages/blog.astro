@@ -1,0 +1,33 @@
+---
+// Redirección client-side: el idioma se guarda en localStorage, que no existe
+// en el servidor. Detecta el idioma preferido y redirige a /{lang}/blog.
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="robots" content="noindex" />
+        <title>Blog</title>
+        <script is:inline>
+            (function () {
+                let lang = (navigator.language || "es").split("-")[0] === "en"
+                    ? "en"
+                    : "es";
+
+                try {
+                    const saved = localStorage.getItem("language");
+                    if (saved) {
+                        const code = JSON.parse(saved).code;
+                        if (code === "es" || code === "en") lang = code;
+                    }
+                } catch (e) {
+                    /* localStorage no disponible o JSON inválido: usamos el idioma del navegador */
+                }
+
+                window.location.replace(`/${lang}/blog`);
+            })();
+        </script>
+    </head>
+    <body></body>
+</html>

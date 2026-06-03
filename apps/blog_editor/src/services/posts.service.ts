@@ -98,8 +98,6 @@ export const getPosts = async (): Promise<GetPostsResult> => {
         ApiResponse<PaginatedResponse<ApiPost>>
     >(ENDPOINTS.POSTS);
 
-    console.log(`${JSON.stringify(response)}`);
-
     return {
         posts: response.data.data.data.map(mapApiPostToPost),
         total: response.data.data.meta.total,
@@ -136,25 +134,15 @@ export const updatePost = async (
     payload: UpdatePostPayload,
     publish: boolean,
 ): Promise<{ message: string }> => {
-    console.log(`payload enviado: ${JSON.stringify(payload)}`);
-
     const response = await apiClient.put<ApiResponse<null>>(
         ENDPOINTS.UPDATE_POST(id, publish),
         payload,
-    );
-
-    console.log(
-        `Response about update post: ${JSON.stringify(response.data.message)}`,
     );
     return { message: response.data.message };
 };
 
 export const getAllTags = async (): Promise<Tag[]> => {
     const response = await apiClient.get<ApiResponse<ApiTag[]>>(ENDPOINTS.TAGS);
-
-    console.log(
-        `Getting all tags ... Response -> ${JSON.stringify(response.data)}}`,
-    );
 
     return response.data.data.map(mapApiTagToTag);
 };

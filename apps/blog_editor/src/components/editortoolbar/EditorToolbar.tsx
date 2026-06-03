@@ -4,12 +4,14 @@ import { PostStatus, type PostStatusType } from "../../models/Post";
 import { translations } from "../../translations/Translations";
 import { TextEditorButton } from "./TextEditorButton";
 import { FormatType } from "@ismael-cordon/blog-shared";
+import { CodeLanguageButton } from "./CodeLanguageButton";
 
 type Translations = typeof translations.es;
 
 interface EditorToolbarProps {
     t: Translations;
     handleFormat: (type: FormatType) => void;
+    handleFormatCode: (language: string) => void;
     deleteArticleOpen: () => void;
     scheduleDialogOpen: () => void;
     savePostContent: (publish: boolean) => void;
@@ -20,6 +22,7 @@ interface EditorToolbarProps {
 export function EditorToolbar({
     t,
     handleFormat,
+    handleFormatCode,
     deleteArticleOpen,
     scheduleDialogOpen,
     savePostContent,
@@ -77,10 +80,10 @@ export function EditorToolbar({
                 tooltip={t.editor_quote}
                 onFormat={handleFormat}
             />
-            <TextEditorButton
-                type="code"
+
+            <CodeLanguageButton
                 tooltip={t.editor_code}
-                onFormat={handleFormat}
+                onFormat={handleFormatCode}
             />
 
             <TextEditorButton

@@ -13,11 +13,11 @@
     list-style-type: none;
 }
 
-.tiptap ol>li {
+.tiptap ol > li {
     counter-increment: item;
 }
 
-.tiptap ol>li>p::before {
+.tiptap ol > li > p::before {
     content: counters(item, ".") ". ";
 }
 
@@ -58,7 +58,7 @@
     text-align: center;
 }
 
-.tiptap-editor p>div:has(img) {
+.tiptap-editor p > div:has(img) {
     display: inline-block !important;
     float: none !important;
     vertical-align: middle !important;
@@ -109,4 +109,8 @@
 
 .tiptap-editor pre code {
     @apply text-sm;
+}
+
+.tiptap-editor code:not(pre code) {
+    @apply bg-slate-800 text-blue-300 rounded px-1.5 py-0.5 text-sm font-mono border border-slate-700;
 }

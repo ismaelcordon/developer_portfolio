@@ -92,6 +92,22 @@ export function EditorToolbar({
                 onFormat={handleFormat}
             />
 
+            <div className="h-5 mx-1.5 border-l border-slate-700 shrink-0" />
+
+            <TextEditorButton
+                type="inline-code"
+                tooltip={t.editor_inline_code}
+                onFormat={handleFormat}
+            />
+
+            <TextEditorButton
+                type="code"
+                tooltip={t.editor_code}
+                onFormat={handleFormat}
+            />
+
+            <div className="h-5 mx-1.5 border-l border-slate-700 shrink-0" />
+
             <TextEditorButton
                 type="link"
                 tooltip={t.editor_link}

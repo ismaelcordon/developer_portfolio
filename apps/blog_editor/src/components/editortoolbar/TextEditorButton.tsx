@@ -2,6 +2,7 @@ import { SPRITE_URL } from "../../constants/paths";
 
 interface TextEditorButtonProps {
     type:
+    | "inline-code"
     | "code"
     | "quote"
     | "list"
@@ -17,6 +18,7 @@ interface TextEditorButtonProps {
     tooltip: string;
     onFormat: (
         type:
+            | "inline-code"
             | "code"
             | "quote"
             | "list"

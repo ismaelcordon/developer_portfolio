@@ -1,4 +1,5 @@
 export type FormatType =
+    | "inline-code"
     | "code"
     | "quote"
     | "list"

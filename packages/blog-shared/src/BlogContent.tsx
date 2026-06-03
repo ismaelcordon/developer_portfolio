@@ -120,6 +120,18 @@ const BlogContent = forwardRef<BlogEditorHandle, Props>(
                         editor.chain().focus().toggleBlockquote().run();
                     }
 
+                    if (type === "inline-code") {
+                        editor.chain().focus().toggleCode().run();
+                    }
+
+                    if (type === "code") {
+                        editor
+                            .chain()
+                            .focus()
+                            .toggleCodeBlock({ language: "kotlin" })
+                            .run();
+                    }
+
                     if (type === "bold") {
                         editor.chain().focus().toggleBold().run();
                     }

@@ -112,8 +112,6 @@ function App() {
     }, [posts, postsLoading]);
 
     const handlePostClick = (post: Post) => {
-        console.log("Post seleccionado:", post);
-
         setSelectedPost(post);
     };
 
@@ -243,7 +241,6 @@ function App() {
         language === "es" ? selectedPost?.contentEs : selectedPost?.content;
 
     useEffect(() => {
-        console.log(`Use effect when selectedPost or lanaguage has changed`)
         if (!selectedPost) {
             setWordCount(0);
             return;
@@ -266,6 +263,10 @@ function App() {
         }
         blogEditorRef.current?.format(type);
     };
+
+    const handleCodeFormat = (language: string) => {
+        blogEditorRef.current?.formatCode(language)
+    }
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -467,6 +468,7 @@ function App() {
                 <EditorToolbar
                     t={t}
                     handleFormat={handleFormat}
+                    handleFormatCode={handleCodeFormat}
                     deleteArticleOpen={deleteArticle.open}
                     scheduleDialogOpen={scheduleDialog.open}
                     savePostContent={savePostContent}

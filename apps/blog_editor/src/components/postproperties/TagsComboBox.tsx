@@ -50,9 +50,6 @@ function TagsComboBox({ tags, selectedTag, onTagChange }: TagComboBoxProps) {
                         <li
                             key={tag.tagId}
                             onClick={() => {
-                                console.log(
-                                    `Nuevo tag seleccionado: ${tag.description}`,
-                                );
                                 onTagChange(tag);
                                 setOpen(false);
                             }}

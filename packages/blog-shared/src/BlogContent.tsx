@@ -16,6 +16,7 @@ import "./styles/blog-content.css";
 
 export interface BlogEditorHandle {
     format: (type: FormatType) => void;
+    formatCode: (language: string) => void;
     insertLink: (url: string, text: string) => void;
     insertImage: (src: string) => void;
     getHTML: () => string;
@@ -81,6 +82,13 @@ const BlogContent = forwardRef<BlogEditorHandle, Props>(
         useImperativeHandle(
             ref,
             () => ({
+                formatCode: (language) => {
+                    editor
+                        .chain()
+                        .focus()
+                        .toggleCodeBlock({ language: language })
+                        .run();
+                },
                 format: (type) => {
                     if (!editor) return;
 
@@ -110,14 +118,6 @@ const BlogContent = forwardRef<BlogEditorHandle, Props>(
 
                     if (type === "quote") {
                         editor.chain().focus().toggleBlockquote().run();
-                    }
-
-                    if (type === "code") {
-                        editor
-                            .chain()
-                            .focus()
-                            .toggleCodeBlock({ language: "kotlin" })
-                            .run();
                     }
 
                     if (type === "bold") {

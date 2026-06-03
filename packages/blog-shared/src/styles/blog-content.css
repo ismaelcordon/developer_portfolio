@@ -13,11 +13,11 @@
     list-style-type: none;
 }
 
-.tiptap ol > li {
+.tiptap ol>li {
     counter-increment: item;
 }
 
-.tiptap ol > li > p::before {
+.tiptap ol>li>p::before {
     content: counters(item, ".") ". ";
 }
 
@@ -43,11 +43,11 @@
 }
 
 .tiptap-editor h3 {
-    @apply text-lg md:text-2xl font-semibold text-slate-100 mt-4 mb-2;
+    @apply text-lg md:text-xl font-semibold text-slate-100 mt-4 mb-2;
 }
 
 .tiptap-editor p {
-    @apply text-white text-base md:text-lg xl:text-xl;
+    @apply text-white text-base;
 }
 
 .tiptap-editor hr {
@@ -58,7 +58,7 @@
     text-align: center;
 }
 
-.tiptap-editor p > div:has(img) {
+.tiptap-editor p>div:has(img) {
     display: inline-block !important;
     float: none !important;
     vertical-align: middle !important;

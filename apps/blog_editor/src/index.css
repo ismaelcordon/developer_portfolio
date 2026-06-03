@@ -2,6 +2,7 @@
 @source "../../../packages/blog-shared/src";
 
 @keyframes zoom-in-out {
+
     0%,
     100% {
         transform: scale(1);
@@ -46,7 +47,7 @@ dialog::backdrop {
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-    width: 4px;
+    width: 8px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
@@ -54,14 +55,11 @@ dialog::backdrop {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: #3f3f46;
-    /* zinc-700 */
-    border-radius: 9999px;
+    @apply border-2 rounded-lg bg-blue-500;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background-color: #52525b;
-    /* zinc-600 */
+    @apply bg-blue-600;
 }
 
 input[type="time"]::-webkit-calendar-picker-indicator {

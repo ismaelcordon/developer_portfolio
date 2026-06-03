@@ -81,11 +81,6 @@ export function EditorToolbar({
                 onFormat={handleFormat}
             />
 
-            <CodeLanguageButton
-                tooltip={t.editor_code}
-                onFormat={handleFormatCode}
-            />
-
             <TextEditorButton
                 type="divider"
                 tooltip={t.editor_divider}
@@ -100,10 +95,9 @@ export function EditorToolbar({
                 onFormat={handleFormat}
             />
 
-            <TextEditorButton
-                type="code"
+            <CodeLanguageButton
                 tooltip={t.editor_code}
-                onFormat={handleFormat}
+                onFormat={handleFormatCode}
             />
 
             <div className="h-5 mx-1.5 border-l border-slate-700 shrink-0" />

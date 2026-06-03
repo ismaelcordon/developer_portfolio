@@ -33,8 +33,10 @@ import HidePost from "./components/postproperties/HidePost";
 import {
     BlogContent,
     BlogEditorHandle,
-    FormatType
+    FormatType,
+    TocHeading
 } from "@ismael-cordon/blog-shared";
+import { TableOfContents } from "./components/TableOfContents";
 
 function App() {
     const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -66,6 +68,9 @@ function App() {
         type: "success" | "error";
     } | null>(null);
     const [wordCount, setWordCount] = useState(0);
+    const [headings, setHeadings] = useState<TocHeading[]>([]);
+    const [tocWidth, setTocWidth] = useState(256);
+    const isResizing = useRef(false);
 
     const { language, t } = useLanguage();
 
@@ -335,6 +340,28 @@ function App() {
             normalize(currentContentEs) !== normalize(serverPost.contentEs);
     }
 
+    const handleMouseDown = (e: React.MouseEvent) => {
+        e.preventDefault();
+        isResizing.current = true;
+
+        const onMouseMove = (e: MouseEvent) => {
+            if (!isResizing.current) return;
+            const newWidth = window.innerWidth - e.clientX;
+            if (newWidth >= 180 && newWidth <= 480) {
+                setTocWidth(newWidth);
+            }
+        };
+
+        const onMouseUp = () => {
+            isResizing.current = false;
+            document.removeEventListener("mousemove", onMouseMove);
+            document.removeEventListener("mouseup", onMouseUp);
+        };
+
+        document.addEventListener("mousemove", onMouseMove);
+        document.addEventListener("mouseup", onMouseUp);
+    };
+
     return (
         <div className="flex h-screen">
             <aside
@@ -398,7 +425,7 @@ function App() {
                 </div>
             </aside>
 
-            <main className="flex flex-col flex-1 min-w-0 bg-slate-900">
+            <main className="flex flex-col flex-1 min-w-0 min-h-0 overflow-hidden bg-slate-900">
                 <div className="px-4 py-4 flex items-center border-b border-slate-700/60">
                     <button
                         onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -554,22 +581,53 @@ function App() {
                         )}
                 </div>
 
-                <div className="w-full mx-auto py-10 px-6 md:px-12 overflow-y-auto flex-1 custom-scrollbar">
-                    <BlogContent
-                        key={`${selectedPost.id}-${language}`}
-                        ref={blogEditorRef}
-                        content={currentContent || ""}
-                        editable={true}
-                        onUpdate={(html) => {
-                            setSelectedPost((prev) => {
-                                if (!prev) return prev;
-                                return language === "es"
-                                    ? { ...prev, contentEs: html }
-                                    : { ...prev, content: html };
-                            });
-                            updateWordCountAndReadingTime(html);
-                        }}
-                    />
+                <div className="w-full flex-1 flex overflow-hidden">
+                    <div className="flex flex-1 overflow-hidden h-full">
+
+                        <div className="flex-1 overflow-y-auto custom-scrollbar">
+                            <div className="py-10 mx-auto px-6 md:px-12">
+                                <BlogContent
+                                    key={`${selectedPost.id}-${language}`}
+                                    ref={blogEditorRef}
+                                    content={currentContent || ""}
+                                    editable={true}
+                                    onUpdate={(html) => {
+                                        setSelectedPost((prev) => {
+                                            if (!prev) return prev;
+                                            return language === "es"
+                                                ? { ...prev, contentEs: html }
+                                                : { ...prev, content: html };
+                                        });
+                                        updateWordCountAndReadingTime(html);
+                                    }}
+                                    onHeadingsChange={setHeadings}
+                                />
+                            </div>
+                        </div>
+
+                        {/* Tabla de contenidos */}
+                        <div
+                            className="border-l border-slate-700/60 bg-slate-900/80 shrink-0 hidden xl:flex flex-col relative h-full"
+                            style={{ width: tocWidth }}
+                        >
+                            <div
+                                onMouseDown={handleMouseDown}
+                                className="absolute left-0 top-0 h-full w-1 cursor-col-resize hover:bg-blue-500/50 transition-colors"
+                            />
+
+                            <div className="p-4 border-b border-slate-700/60 flex items-center justify-between">
+                                <div className="flex items-center gap-2 text-slate-400">
+                                    <svg className="w-4 h-4">
+                                        <use href={`${SPRITE_URL}#list-icon`} />
+                                    </svg>
+                                    <h3 className="text-md font-semibold">Tabla de contenidos</h3>
+                                </div>
+                            </div>
+
+                            {/* Headings list */}
+                            <TableOfContents headings={headings} />
+                        </div>
+                    </div>
                 </div>
 
                 <WordCounter wordCount={wordCount} />

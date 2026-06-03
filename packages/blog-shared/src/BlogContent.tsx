@@ -4,6 +4,7 @@ import CodeBlockShiki from "tiptap-extension-code-block-shiki";
 import Placeholder from "@tiptap/extension-placeholder";
 import ImageResize from "tiptap-extension-resize-image";
 import { YoutubeAutoEmbed } from "./extensions/YoutubeAutoEmbed";
+import { HeadingId } from "./extensions/HeadingId";
 import {
     forwardRef,
     useImperativeHandle,
@@ -11,7 +12,9 @@ import {
     useRef,
     useState,
 } from "react";
+import type { Editor } from "@tiptap/react";
 import { FormatType } from "./types/FormatType";
+import { slugify } from "./utils/slugify";
 import "./styles/blog-content.css";
 
 export interface BlogEditorHandle {
@@ -22,17 +25,50 @@ export interface BlogEditorHandle {
     getHTML: () => string;
 }
 
+export interface TocHeading {
+    level: 1 | 2 | 3;
+    text: string;
+    id: string;
+}
+
 interface Props {
     content: string;
     editable?: boolean;
     onUpdate?: (html: string) => void;
+    onHeadingsChange?: (headings: TocHeading[]) => void;
 }
 
+const syncHeadings = (
+    editor: Editor,
+    onHeadingsChange?: (headings: TocHeading[]) => void,
+) => {
+    const { state, view } = editor;
+    const { tr } = state;
+    const headings: TocHeading[] = [];
+    let modified = false;
+
+    state.doc.descendants((node, pos) => {
+        if (node.type.name === "heading" && [1, 2, 3].includes(node.attrs.level)) {
+            const id = slugify(node.textContent);
+            if (node.attrs.id !== id) {
+                tr.setNodeMarkup(pos, undefined, { ...node.attrs, id });
+                modified = true;
+            }
+            headings.push({ level: node.attrs.level, text: node.textContent, id });
+        }
+    });
+
+    if (modified) view.dispatch(tr);
+    onHeadingsChange?.(headings);
+};
+
 const BlogContent = forwardRef<BlogEditorHandle, Props>(
-    ({ content, editable = false, onUpdate }, ref) => {
+    ({ content, editable = false, onUpdate, onHeadingsChange }, ref) => {
         const [initialContent] = useState(content);
         const onUpdateRef = useRef(onUpdate);
         onUpdateRef.current = onUpdate;
+        const onHeadingsChangeRef = useRef(onHeadingsChange);
+        onHeadingsChangeRef.current = onHeadingsChange;
 
         const extensions = useMemo(
             () => [
@@ -50,6 +86,7 @@ const BlogContent = forwardRef<BlogEditorHandle, Props>(
                     placeholder: "Empieza a escribir...",
                 }),
                 YoutubeAutoEmbed,
+                HeadingId,
                 ImageResize.configure({
                     inline: true,
                     HTMLAttributes: {
@@ -74,8 +111,12 @@ const BlogContent = forwardRef<BlogEditorHandle, Props>(
             editable,
             editorProps,
             extensions,
+            onCreate({ editor }) {
+                syncHeadings(editor, onHeadingsChangeRef.current);
+            },
             onUpdate({ editor }) {
                 onUpdateRef.current?.(editor.getHTML());
+                syncHeadings(editor, onHeadingsChangeRef.current);
             },
         });
 
@@ -155,7 +196,7 @@ const BlogContent = forwardRef<BlogEditorHandle, Props>(
                 insertLink: (url, text) => {
                     if (!editor) return;
 
-                    const linkClasses = "underline text-red-500";
+                    const linkClasses = "underline text-blue-500";
 
                     if (text && editor.state.selection.empty) {
                         editor

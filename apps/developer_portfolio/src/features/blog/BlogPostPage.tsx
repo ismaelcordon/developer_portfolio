@@ -15,6 +15,7 @@ export default function BlogPostPage() {
     const [post, setPost] = useState<Post | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
+    const { theme } = useSettings();
 
     const { language } = useSettings();
 
@@ -109,7 +110,10 @@ export default function BlogPostPage() {
                     {post.description}
                 </p>
 
-                <BlogContent content={post.content} />
+                <BlogContent
+                    key={theme}
+                    theme={theme}
+                    content={post.content} />
             </div>
         </div>
     );

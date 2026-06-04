@@ -1,5 +1,7 @@
 @reference "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 .tiptap-editor {
     outline: none;
     white-space: pre-wrap;
@@ -13,11 +15,11 @@
     list-style-type: none;
 }
 
-.tiptap ol > li {
+.tiptap ol>li {
     counter-increment: item;
 }
 
-.tiptap ol > li > p::before {
+.tiptap ol>li>p::before {
     content: counters(item, ".") ". ";
 }
 
@@ -35,30 +37,30 @@
 }
 
 .tiptap-editor h1 {
-    @apply text-2xl md:text-3xl text-slate-100 font-bold mt-6 mb-4;
+    @apply text-slate-900 dark:text-white text-2xl md:text-3xl font-bold mt-6 mb-4;
 }
 
 .tiptap-editor h2 {
-    @apply text-xl md:text-2xl font-semibold text-slate-100 mt-5 mb-3;
+    @apply text-slate-900 dark:text-white text-xl md:text-2xl font-semibold mt-5 mb-3;
 }
 
 .tiptap-editor h3 {
-    @apply text-lg md:text-xl font-semibold text-slate-100 mt-4 mb-2;
+    @apply text-slate-900 dark:text-white text-lg md:text-xl font-semibold mt-4 mb-2;
 }
 
 .tiptap-editor p {
-    @apply text-white text-base;
+    @apply text-slate-600 dark:text-white text-base;
 }
 
 .tiptap-editor hr {
-    @apply my-8 border-t-1 border-solid border-slate-300 dark:border-slate-700;
+    @apply my-8 border-t border-solid border-slate-300 dark:border-slate-700;
 }
 
 .tiptap-editor p:has(img) {
     text-align: center;
 }
 
-.tiptap-editor p > div:has(img) {
+.tiptap-editor p>div:has(img) {
     display: inline-block !important;
     float: none !important;
     vertical-align: middle !important;
@@ -75,11 +77,11 @@
 }
 
 .tiptap-editor blockquote {
-    @apply my-4 pl-4 py-3 border-l-4 rounded-r-lg italic bg-slate-800 text-slate-300 border-s-2 border-blue-600;
+    @apply my-4 pl-4 py-3 border-l-4 rounded-r-lg italic bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-s-2 border-blue-400 dark:border-blue-600;
 }
 
 .tiptap-editor blockquote p {
-    @apply m-0 px-2 text-slate-300 text-base;
+    @apply m-0 px-2 text-slate-600 dark:text-slate-300 text-base;
 }
 
 .tiptap-editor blockquote {
@@ -104,7 +106,12 @@
 }
 
 .tiptap-editor pre {
+    background: #f1f5f9 !important;
+}
+
+.dark .tiptap-editor pre {
     background: #1e293b !important;
+    /* slate-800 */
 }
 
 .tiptap-editor pre code {
@@ -112,5 +119,5 @@
 }
 
 .tiptap-editor code:not(pre code) {
-    @apply bg-slate-800 text-blue-300 rounded px-1.5 py-0.5 text-sm font-mono border border-slate-700;
+    @apply bg-blue-50 dark:bg-slate-800 text-blue-700 dark:text-blue-300 rounded px-1.5 py-0.5 text-sm font-mono border border-blue-200 dark:border-slate-700;
 }

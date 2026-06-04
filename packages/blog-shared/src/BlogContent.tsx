@@ -34,6 +34,7 @@ export interface TocHeading {
 interface Props {
     content: string;
     editable?: boolean;
+    theme?: "light" | "dark";
     onUpdate?: (html: string) => void;
     onHeadingsChange?: (headings: TocHeading[]) => void;
 }
@@ -63,7 +64,7 @@ const syncHeadings = (
 };
 
 const BlogContent = forwardRef<BlogEditorHandle, Props>(
-    ({ content, editable = false, onUpdate, onHeadingsChange }, ref) => {
+    ({ theme, content, editable = false, onUpdate, onHeadingsChange }, ref) => {
         const [initialContent] = useState(content);
         const onUpdateRef = useRef(onUpdate);
         onUpdateRef.current = onUpdate;
@@ -76,7 +77,7 @@ const BlogContent = forwardRef<BlogEditorHandle, Props>(
                     codeBlock: false,
                 }),
                 CodeBlockShiki.configure({
-                    defaultTheme: "github-dark",
+                    defaultTheme: theme === "dark" ? "github-dark" : "github-light",
                     HTMLAttributes: {
                         style: "background: none",
                     },
@@ -94,7 +95,7 @@ const BlogContent = forwardRef<BlogEditorHandle, Props>(
                     },
                 }),
             ],
-            [],
+            [theme],
         );
 
         const editorProps = useMemo(

@@ -1,0 +1,22 @@
+name: PR Agent
+
+on:
+    pull_request:
+        types: [opened, reopened, ready_for_review, synchronize]
+jobs:
+    pr_agent_job:
+        if: ${{ github.event.sender.type != 'Bot' }}
+        runs-on: ubuntu-latest
+
+        permissions:
+            pull-requests: write
+            contents: write
+
+        steps:
+            - name: Run PR-Agent
+              uses: qodo-ai/pr-agent@1b0609a013f53694c36d457149bde70abf50c048
+              env:
+                  OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  github_action_config.auto_describe: "true"
+                  github_action_config.pr_actions: '["opened","reopened","ready_for_review","synchronize"]'
